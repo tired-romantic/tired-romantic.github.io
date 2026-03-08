@@ -1,12 +1,667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>shiru</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #10101a;
+      --surface2: #161625;
+      --border: rgba(180,160,255,0.1);
+      --glow: rgba(160,130,255,0.18);
+      --glow2: rgba(255,160,200,0.10);
+      --text: #d8d4f0;
+      --muted: #7a7590;
+      --accent: #b8a4f8;
+      --accent2: #f0a8c8;
+      --accent3: #8ad4c8;
+      --white: #ede8ff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(180,160,255,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.35s ease, width 0.3s, height 0.3s;
+      mix-blend-mode: screen;
+    }
+
+    /* grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    /* ambient glow blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 500px; height: 500px; background: rgba(120,90,240,0.12); top: -150px; left: -150px; animation: drift1 18s ease-in-out infinite; }
+    .blob-2 { width: 400px; height: 400px; background: rgba(240,100,160,0.08); bottom: -100px; right: -100px; animation: drift2 22s ease-in-out infinite; }
+    .blob-3 { width: 300px; height: 300px; background: rgba(80,200,190,0.07); top: 40%; left: 60%; animation: drift3 16s ease-in-out infinite; }
+
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
+    @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
+
+    /* layout */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 80px 32px 120px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeUp 1s 0.2s forwards ease;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 12vw, 96px);
+      line-height: 0.95;
+      color: var(--white);
+      position: relative;
+    }
+
+    .hero-name .glow-char {
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(180,160,255,0.6), 0 0 80px rgba(180,160,255,0.2);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--accent2);
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--muted);
+      max-width: 420px;
+      border-left: 1px solid var(--border);
+      padding-left: 20px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
+      transition: all 0.3s;
+    }
+    .badge:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 12px rgba(180,160,255,0.15);
+    }
+
+    .scroll-hint {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--muted);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 60px 0;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 80px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .section.visible { opacity: 1; transform: translateY(0); }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::before {
+      content: '//';
+      color: var(--muted);
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .about-cell {
+      background: var(--surface);
+      padding: 24px;
+      transition: background 0.3s;
+    }
+    .about-cell:hover { background: var(--surface2); }
+    .about-cell-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .about-cell-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--white);
+    }
+
+    .about-para {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+
+    .about-para em {
+      color: var(--accent2);
+      font-style: normal;
+    }
+
+    /* ── MUSIC ── */
+    .music-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .music-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .music-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.3s;
+    }
+    .music-item:hover {
+      background: var(--surface2);
+      transform: translateX(4px);
+    }
+    .music-item:hover::before { transform: scaleY(1); }
+
+    .music-num {
+      font-size: 10px;
+      color: var(--muted);
+      width: 20px;
+    }
+    .music-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      color: var(--white);
+      flex: 1;
+    }
+    .music-tag {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent3);
+    }
+
+    /* ── PROJECTS ── */
+    .project-card {
+      border: 1px solid var(--border);
+      padding: 28px;
+      background: var(--surface);
+      margin-bottom: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .project-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .project-card:hover { background: var(--surface2); border-color: rgba(180,160,255,0.2); }
+    .project-card:hover::after { opacity: 1; }
+
+    .project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .project-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+    .project-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid rgba(240,168,200,0.2);
+      padding: 3px 9px;
+      margin-top: 14px;
+      border-radius: 1px;
+    }
+
+    /* ── LINKS ── */
+    .links-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .link-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .link-row::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--glow), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .link-row:hover { border-color: rgba(180,160,255,0.25); transform: translateX(6px); }
+    .link-row:hover::before { opacity: 1; }
+    .link-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+    }
+    .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+    .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* glitch on name hover */
+    .hero-name:hover .glitch-text {
+      animation: glitch 0.4s steps(2) forwards;
+    }
+    @keyframes glitch {
+      0%   { text-shadow: 2px 0 var(--accent2), -2px 0 var(--accent3); }
+      25%  { text-shadow: -3px 0 var(--accent2), 3px 0 var(--accent3); clip-path: inset(20% 0 60% 0); }
+      50%  { text-shadow: 3px 0 var(--accent), -3px 0 var(--accent2); }
+      75%  { text-shadow: -2px 0 var(--accent3), 2px 0 var(--accent); clip-path: inset(60% 0 10% 0); }
+      100% { text-shadow: none; clip-path: none; }
+    }
+
+    @media (max-width: 480px) {
+      .page { padding: 60px 20px 80px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 12px; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to My Website</h1>
-    <p>This is the index page.</p>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <p class="hero-tag">↳ personal space</p>
+      <h1 class="hero-name">
+        <span class="glitch-text">sh<span class="glow-char">ī</span>ru</span>
+      </h1>
+      <p class="hero-subtitle">seal / artist / person-shaped chaos</p>
+      <p class="hero-tag" style="margin-top:-8px; letter-spacing:0.2em;">@ tired.romantic</p>
+      <p class="hero-desc">
+        15. dutch. grungepunk with soft edges.<br/>
+        i make things — art, music, code, food, trouble.<br/>
+        probably listening to radiohead right now.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">he/him</span>
+        <span class="badge">🏳️‍🌈 gay</span>
+        <span class="badge">adhd-brained</span>
+        <span class="badge">calligrapher</span>
+        <span class="badge">gmt+1</span>
+      </div>
+      <p class="scroll-hint">scroll</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <p class="section-label">about</p>
+      <div class="about-grid">
+        <div class="about-cell">
+          <p class="about-cell-label">age</p>
+          <p class="about-cell-val">fifteen</p>
+        </div>
+        <div class="about-cell">
+          <p class="about-cell-label">based</p>
+          <p class="about-cell-val">the netherlands</p>
+        </div>
+        <div class="about-cell">
+          <p class="about-cell-label">languages</p>
+          <p class="about-cell-val">nl · en · fr · de · py</p>
+        </div>
+        <div class="about-cell">
+          <p class="about-cell-label">aesthetic</p>
+          <p class="about-cell-val">grungepunk ∿ liminal</p>
+        </div>
+      </div>
+      <p class="about-para">
+        i'm a walking contradiction — <em>chaotic but calculated</em>, loud online and soft in real life.
+        i hyperfixate hard on projects: calligraphy, digital art, code, cooking, music.
+        i'll build something elaborate and beautiful and then vanish.
+        that's just how it goes.<br/><br/>
+        currently: taking singing lessons, working on <em>art things</em>, 
+        and existing messily in the world.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- MUSIC -->
+    <section class="section" id="music">
+      <p class="section-label">music / interests</p>
+      <ul class="music-list">
+        <li class="music-item">
+          <span class="music-num">01</span>
+          <span class="music-name">Måneskin</span>
+          <span class="music-tag">obsessed</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">02</span>
+          <span class="music-name">Radiohead</span>
+          <span class="music-tag">core</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">03</span>
+          <span class="music-name">Alex G</span>
+          <span class="music-tag">bedroom indie</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">04</span>
+          <span class="music-name">TV Girl</span>
+          <span class="music-tag">dream pop</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">05</span>
+          <span class="music-name">The Dresden Dolls</span>
+          <span class="music-tag">dark cabaret</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">06</span>
+          <span class="music-name">Hozier</span>
+          <span class="music-tag">feels</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">07</span>
+          <span class="music-name">Arctic Monkeys</span>
+          <span class="music-tag">currently learning</span>
+        </li>
+        <li class="music-item">
+          <span class="music-num">08</span>
+          <span class="music-name">Rainbow Kitten Surprise</span>
+          <span class="music-tag">soft hours</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <p class="section-label">art / projects</p>
+
+      <div class="project-card">
+        <h3 class="project-title">Calligraphy & Text Art</h3>
+        <p class="project-desc">
+          hand lettering with a dark edge. names, phrases, pieces that feel like they were 
+          pulled out of a journal at 2am. ink and intention.
+        </p>
+        <span class="project-tag">ongoing</span>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">Digital Art</h3>
+        <p class="project-desc">
+          krita + drawing tablet. building a visual language that matches the inside of my head — 
+          moody, layered, a little haunted.
+        </p>
+        <span class="project-tag">krita · digital</span>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">Music</h3>
+        <p class="project-desc">
+          singing lessons, covers, messing around with production.
+          music is less a hobby and more a language i'm still learning to speak.
+          currently working on "505" and trying not to butcher it.
+          also building a little DAW app called MUZE on the side because why not.
+        </p>
+        <span class="project-tag">ongoing · covers · production</span>
+      </div>
+
+      <div class="project-card">
+        <h3 class="project-title">Cooking</h3>
+        <p class="project-desc">
+          seriously considering culinary school. testing recipes, building skills. 
+          turns out feeding people is its own kind of art.
+        </p>
+        <span class="project-tag">maybe a career actually</span>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- LINKS -->
+    <section class="section" id="links">
+      <p class="section-label">links</p>
+      <div class="links-grid">
+        <a class="link-row" href="#">
+          <span class="link-name">discord</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a class="link-row" href="#">
+          <span class="link-name">instagram</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a class="link-row" href="#">
+          <span class="link-name">github</span>
+          <span class="link-arrow">→</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span>shiru · 2026</span>
+      <span>made with mess ✌</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx - 5 + 'px';
+      cursor.style.top  = my - 5 + 'px';
+    });
+
+    (function animateRing() {
+      rx += (mx - rx - 18) * 0.12;
+      ry += (my - ry - 18) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    document.querySelectorAll('a, .badge, .music-item, .project-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2.5)';
+        ring.style.width = '56px';
+        ring.style.height = '56px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+
+    // scroll reveal
+    const sections = document.querySelectorAll('.section');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    sections.forEach(s => obs.observe(s));
+  </script>
 </body>
 </html>
