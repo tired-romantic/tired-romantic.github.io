@@ -22,7 +22,6 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -35,7 +34,6 @@
       cursor: none;
     }
 
-    /* custom cursor */
     .cursor {
       position: fixed;
       width: 10px; height: 10px;
@@ -57,7 +55,6 @@
       mix-blend-mode: screen;
     }
 
-    /* grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -69,7 +66,6 @@
       opacity: 0.5;
     }
 
-    /* ambient glow blobs */
     .blob {
       position: fixed;
       border-radius: 50%;
@@ -85,7 +81,6 @@
     @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
     @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
 
-    /* layout */
     .page {
       position: relative;
       z-index: 1;
@@ -94,7 +89,6 @@
       padding: 80px 32px 120px;
     }
 
-    /* HERO */
     .hero {
       min-height: 90vh;
       display: flex;
@@ -160,6 +154,7 @@
       color: var(--muted);
       background: rgba(255,255,255,0.02);
       transition: all 0.3s;
+      cursor: none;
     }
     .badge:hover {
       border-color: var(--accent);
@@ -187,7 +182,6 @@
     }
     @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
 
-    /* DIVIDER */
     .divider {
       width: 100%;
       height: 1px;
@@ -195,7 +189,6 @@
       margin: 60px 0;
     }
 
-    /* SECTION */
     .section {
       margin-bottom: 80px;
       opacity: 0;
@@ -214,12 +207,8 @@
       align-items: center;
       gap: 16px;
     }
-    .section-label::before {
-      content: '//';
-      color: var(--muted);
-    }
+    .section-label::before { content: '//'; color: var(--muted); }
 
-    /* ABOUT */
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -232,41 +221,16 @@
       background: var(--surface);
       padding: 24px;
       transition: background 0.3s;
+      cursor: none;
     }
     .about-cell:hover { background: var(--surface2); }
-    .about-cell-label {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .about-cell-val {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 18px;
-      color: var(--white);
-    }
+    .about-cell-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .about-cell-val { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--white); }
 
-    .about-para {
-      font-size: 13px;
-      line-height: 2;
-      color: var(--muted);
-      margin-top: 24px;
-    }
+    .about-para { font-size: 13px; line-height: 2; color: var(--muted); margin-top: 24px; }
+    .about-para em { color: var(--accent2); font-style: normal; }
 
-    .about-para em {
-      color: var(--accent2);
-      font-style: normal;
-    }
-
-    /* MUSIC */
-    .music-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .music-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
     .music-item {
       display: flex;
       align-items: center;
@@ -277,6 +241,7 @@
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      cursor: none;
     }
     .music-item::before {
       content: '';
@@ -287,31 +252,13 @@
       transform: scaleY(0);
       transition: transform 0.3s;
     }
-    .music-item:hover {
-      background: var(--surface2);
-      transform: translateX(4px);
-    }
+    .music-item:hover { background: var(--surface2); transform: translateX(4px); }
     .music-item:hover::before { transform: scaleY(1); }
 
-    .music-num {
-      font-size: 10px;
-      color: var(--muted);
-      width: 20px;
-    }
-    .music-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      color: var(--white);
-      flex: 1;
-    }
-    .music-tag {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent3);
-    }
+    .music-num { font-size: 10px; color: var(--muted); width: 20px; }
+    .music-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); flex: 1; }
+    .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); }
 
-    /* PROJECTS */
     .project-card {
       border: 1px solid var(--border);
       padding: 28px;
@@ -320,6 +267,7 @@
       position: relative;
       overflow: hidden;
       transition: all 0.3s;
+      cursor: none;
     }
     .project-card::after {
       content: '';
@@ -333,17 +281,8 @@
     .project-card:hover { background: var(--surface2); border-color: rgba(180,160,255,0.2); }
     .project-card:hover::after { opacity: 1; }
 
-    .project-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      color: var(--white);
-      margin-bottom: 10px;
-    }
-    .project-desc {
-      font-size: 12px;
-      line-height: 1.9;
-      color: var(--muted);
-    }
+    .project-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 10px; }
+    .project-desc { font-size: 12px; line-height: 1.9; color: var(--muted); }
     .project-tag {
       display: inline-block;
       font-size: 9px;
@@ -356,12 +295,7 @@
       border-radius: 1px;
     }
 
-    /* LINKS */
-    .links-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .links-grid { display: flex; flex-direction: column; gap: 2px; }
     .link-row {
       display: flex;
       align-items: center;
@@ -374,6 +308,7 @@
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      cursor: none;
     }
     .link-row::before {
       content: '';
@@ -385,15 +320,106 @@
     }
     .link-row:hover { border-color: rgba(180,160,255,0.25); transform: translateX(6px); }
     .link-row:hover::before { opacity: 1; }
-    .link-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-style: italic;
-    }
-    .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+    .link-left { display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 1; }
+    .link-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; }
+    .link-sub { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); transition: color 0.3s; }
+    .link-row:hover .link-sub { color: var(--accent2); }
+    .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; position: relative; z-index: 1; }
     .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
 
-    /* FOOTER */
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 9999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5,5,10,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      max-width: 420px;
+      width: 90%;
+      padding: 40px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, var(--glow), transparent 60%);
+      pointer-events: none;
+    }
+
+    .modal-tag {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .modal-tag::before { content: '// '; color: var(--muted); }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .modal-body { font-size: 12px; line-height: 2; color: var(--muted); }
+    .modal-body em { color: var(--accent2); font-style: normal; }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: none;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--accent); }
+
+    .modal-divider { width: 40px; height: 1px; background: var(--border); margin: 20px 0; }
+
     .footer {
       margin-top: 80px;
       padding-top: 32px;
@@ -407,16 +433,12 @@
       color: var(--muted);
     }
 
-    /* ANIMATIONS */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* glitch on name hover */
-    .hero-name:hover .glitch-text {
-      animation: glitch 0.4s steps(2) forwards;
-    }
+    .hero-name:hover .glitch-text { animation: glitch 0.4s steps(2) forwards; }
     @keyframes glitch {
       0%   { text-shadow: 2px 0 var(--accent2), -2px 0 var(--accent3); }
       25%  { text-shadow: -3px 0 var(--accent2), 3px 0 var(--accent3); clip-path: inset(20% 0 60% 0); }
@@ -436,6 +458,17 @@
 
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">esc</button>
+      <p class="modal-tag" id="modalTag"></p>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-divider"></div>
+      <p class="modal-body" id="modalBody"></p>
+    </div>
+  </div>
 
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -443,7 +476,6 @@
 
   <div class="page">
 
-    <!-- HERO -->
     <section class="hero">
       <p class="hero-tag">↳ personal space</p>
       <h1 class="hero-name">
@@ -457,34 +489,33 @@
         probably listening to radiohead right now.
       </p>
       <div class="hero-badges">
-        <span class="badge">he/him</span>
-        <span class="badge">🏳️‍🌈 gay</span>
-        <span class="badge">adhd-brained</span>
-        <span class="badge">calligrapher</span>
-        <span class="badge">gmt+1</span>
+        <span class="badge" data-modal="badge" data-key="he">he/him</span>
+        <span class="badge" data-modal="badge" data-key="gay">🏳️‍🌈 gay</span>
+        <span class="badge" data-modal="badge" data-key="adhd">adhd-brained</span>
+        <span class="badge" data-modal="badge" data-key="calli">calligrapher</span>
+        <span class="badge" data-modal="badge" data-key="gmt">gmt+1</span>
       </div>
       <p class="scroll-hint">scroll</p>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ABOUT -->
     <section class="section" id="about">
       <p class="section-label">about</p>
       <div class="about-grid">
-        <div class="about-cell">
+        <div class="about-cell" data-modal="about" data-key="age">
           <p class="about-cell-label">age</p>
           <p class="about-cell-val">fifteen</p>
         </div>
-        <div class="about-cell">
+        <div class="about-cell" data-modal="about" data-key="based">
           <p class="about-cell-label">based</p>
           <p class="about-cell-val">the netherlands</p>
         </div>
-        <div class="about-cell">
+        <div class="about-cell" data-modal="about" data-key="languages">
           <p class="about-cell-label">languages</p>
           <p class="about-cell-val">nl · en · fr · de · py</p>
         </div>
-        <div class="about-cell">
+        <div class="about-cell" data-modal="about" data-key="aesthetic">
           <p class="about-cell-label">aesthetic</p>
           <p class="about-cell-val">grungepunk ∿ liminal</p>
         </div>
@@ -494,53 +525,52 @@
         i hyperfixate hard on projects: calligraphy, digital art, code, cooking, music.
         i'll build something elaborate and beautiful and then vanish.
         that's just how it goes.<br/><br/>
-        currently: taking singing lessons, working on <em>art things</em>, 
+        currently: taking singing lessons, working on <em>art things</em>,
         and existing messily in the world.
       </p>
     </section>
 
     <div class="divider"></div>
 
-    <!-- MUSIC -->
     <section class="section" id="music">
       <p class="section-label">music / interests</p>
       <ul class="music-list">
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="maneskin">
           <span class="music-num">01</span>
           <span class="music-name">Måneskin</span>
           <span class="music-tag">obsessed</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="radiohead">
           <span class="music-num">02</span>
           <span class="music-name">Radiohead</span>
           <span class="music-tag">core</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="alexg">
           <span class="music-num">03</span>
           <span class="music-name">Alex G</span>
           <span class="music-tag">bedroom indie</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="tvgirl">
           <span class="music-num">04</span>
           <span class="music-name">TV Girl</span>
           <span class="music-tag">dream pop</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="dresden">
           <span class="music-num">05</span>
           <span class="music-name">The Dresden Dolls</span>
           <span class="music-tag">dark cabaret</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="hozier">
           <span class="music-num">06</span>
           <span class="music-name">Hozier</span>
           <span class="music-tag">feels</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="arctic">
           <span class="music-num">07</span>
           <span class="music-name">Arctic Monkeys</span>
           <span class="music-tag">currently learning</span>
         </li>
-        <li class="music-item">
+        <li class="music-item" data-modal="music" data-key="rks">
           <span class="music-num">08</span>
           <span class="music-name">Rainbow Kitten Surprise</span>
           <span class="music-tag">soft hours</span>
@@ -550,43 +580,41 @@
 
     <div class="divider"></div>
 
-    <!-- PROJECTS -->
     <section class="section" id="projects">
       <p class="section-label">art / projects</p>
 
-      <div class="project-card">
+      <div class="project-card" data-modal="project" data-key="calli">
         <h3 class="project-title">Calligraphy & Text Art</h3>
         <p class="project-desc">
-          hand lettering with a dark edge. names, phrases, pieces that feel like they were 
+          hand lettering with a dark edge. names, phrases, pieces that feel like they were
           pulled out of a journal at 2am. ink and intention.
         </p>
         <span class="project-tag">ongoing</span>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" data-modal="project" data-key="digital">
         <h3 class="project-title">Digital Art</h3>
         <p class="project-desc">
-          krita + drawing tablet. building a visual language that matches the inside of my head:
+          procreate + drawing tablet. building a visual language that matches the inside of my head:
           moody, layered, a little haunted.
         </p>
         <span class="project-tag">krita · digital</span>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" data-modal="project" data-key="music">
         <h3 class="project-title">Music</h3>
         <p class="project-desc">
           singing lessons, covers, messing around with production.
           music is less a hobby and more a language i'm still learning to speak.
-          currently working on "505" and trying not to butcher it.
           also building a little DAW app called MUZE on the side because why not.
         </p>
         <span class="project-tag">ongoing · covers · production</span>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" data-modal="project" data-key="cooking">
         <h3 class="project-title">Cooking</h3>
         <p class="project-desc">
-          seriously considering culinary school. testing recipes, building skills. 
+          seriously considering culinary school. testing recipes, building skills.
           turns out feeding people is its own kind of art.
         </p>
         <span class="project-tag">maybe a career actually</span>
@@ -595,26 +623,11 @@
 
     <div class="divider"></div>
 
-    <!-- LINKS -->
     <section class="section" id="links">
       <p class="section-label">links</p>
-      <div class="links-grid">
-        <a class="link-row" href="#">
-          <span class="link-name">discord</span>
-          <span class="link-arrow">→</span>
-        </a>
-        <a class="link-row" href="#">
-          <span class="link-name">instagram</span>
-          <span class="link-arrow">→</span>
-        </a>
-        <a class="link-row" href="#">
-          <span class="link-name">github</span>
-          <span class="link-arrow">→</span>
-        </a>
-      </div>
+      <div class="links-grid" id="linksGrid"></div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
       <span>shiru · 2026</span>
       <span>made with mess ✌</span>
@@ -642,25 +655,138 @@
       requestAnimationFrame(animateRing);
     })();
 
-    document.querySelectorAll('a, .badge, .music-item, .project-card').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2.5)';
-        ring.style.width = '56px';
-        ring.style.height = '56px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        ring.style.width = '36px';
-        ring.style.height = '36px';
-      });
-    });
-
     // scroll reveal
     const sections = document.querySelectorAll('.section');
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     sections.forEach(s => obs.observe(s));
+
+    // modal data
+    const modalData = {
+      badge: {
+        he:    { tag: 'pronouns',     title: 'he / him',            body: 'yeah. just he/him. pretty straightforward on this one.' },
+        gay:   { tag: 'identity',     title: 'openly, loudly gay',  body: 'not a phase. very much a feature. 🏳️‍🌈' },
+        adhd:  { tag: 'brain stuff',  title: 'adhd-brained',        body: 'hyperfixation hours are <em>always</em> active. currently: everything at once. send help or snacks.' },
+        calli: { tag: 'craft',        title: 'calligrapher',         body: "ink on paper, names in the dark, letters that feel like they mean something. it's a whole thing." },
+        gmt:   { tag: 'timezone',     title: 'gmt+1',               body: 'the netherlands. yes it rains a lot. yes i like it anyway.' },
+      },
+      about: {
+        age:       { tag: 'about',     title: 'fifteen',                      body: '15. got a drawing tablet as a birthday gift and immediately lost sleep over it.' },
+        based:     { tag: 'location',  title: 'the netherlands',              body: 'flat land, grey skies, excellent public transport. not for everyone but it is mine.' },
+        languages: { tag: 'languages', title: 'nl · en · fr · de · py',      body: 'dutch natively, english basically fluently, french and german because school. python because i got obsessed with building things.' },
+        aesthetic: { tag: 'vibe',      title: 'grungepunk ∿ liminal',        body: 'dark tones, baggy layers, big thighs, tired eyes. spaces that feel like 3am. music that sounds like a breakdown in a good way.' },
+      },
+      music: {
+        maneskin:  { tag: 'currently obsessed', title: 'Måneskin',              body: 'they walked so my entire personality could run. the theatrics. the chaos. the eyeliner. perfection.' },
+        radiohead: { tag: 'core artist',        title: 'Radiohead',             body: 'ok computer is a religious experience. thom yorke wrote songs specifically designed to ruin your day in the best way.' },
+        alexg:     { tag: 'bedroom indie',      title: 'Alex G',                body: 'sounds like a dream you half-remember. lo-fi and deeply strange in a way that feels personal.' },
+        tvgirl:    { tag: 'dream pop',          title: 'TV Girl',               body: 'french exit is an album i put on when i want to feel melancholy but make it fashionable.' },
+        dresden:   { tag: 'dark cabaret',       title: 'The Dresden Dolls',     body: "amanda palmer said 'what's normal anyway' and then made an entire genre out of it. iconic." },
+        hozier:    { tag: 'feels',              title: 'Hozier',                body: "unreal unearth broke something in me. in a good way. mostly. i'm fine." },
+        arctic:    { tag: 'currently learning', title: 'Arctic Monkeys',        body: 'alex turner wrote that song personally for people who feel too much.' },
+        rks:       { tag: 'soft hours',         title: 'Rainbow Kitten Surprise', body: "for when the chaos settles and you just need something warm. it's the 3am album." },
+      },
+      project: {
+        calli:   { tag: 'status: ongoing',        title: 'Calligraphy & Text Art', body: 'currently lettering names and phrases. ink is the one medium that feels permanent in a good way.' },
+        digital: { tag: 'status: building',       title: 'Digital Art',            body: 'procreate on a drawing tablet. still finding the visual language. moody, layered, a little haunted. getting there.' },
+        music:   { tag: 'status: ongoing',        title: 'Music',                  body: "singing lessons weekly. also building <em>MUZE</em>, a DAW app in electron + react. it crashes sometimes. we don't talk about it." },
+        cooking: { tag: 'status: maybe a career', title: 'Cooking',                body: 'genuinely considering culinary school over media college. turns out feeding people hits different.' },
+      },
+    };
+
+    // modal logic
+    const overlay  = document.getElementById('modalOverlay');
+    const modalTag   = document.getElementById('modalTag');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody  = document.getElementById('modalBody');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModal(tag, title, body) {
+      modalTag.textContent = tag;
+      modalTitle.textContent = title;
+      modalBody.innerHTML = body;
+      overlay.classList.add('open');
+    }
+    function closeModal() { overlay.classList.remove('open'); }
+
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('[data-modal]').forEach(el => {
+      el.addEventListener('click', () => {
+        const data = modalData[el.dataset.modal]?.[el.dataset.key];
+        if (data) openModal(data.tag, data.title, data.body);
+      });
+    });
+
+    // links
+    const linksData = [
+      { name: 'discord', sub: 'come say hi',         copy: 'tired.romantic', url: null },
+      { name: 'spotify', sub: "what i'm rotting to", copy: null,             url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
+    ];
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    const grid = document.getElementById('linksGrid');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    shuffle(linksData).forEach(link => {
+      const a = document.createElement('a');
+      a.className = 'link-row';
+      a.href = link.url || '#';
+      if (link.url) a.target = '_blank';
+      a.innerHTML = `
+        <div class="link-left">
+          <span class="link-name">${link.name}</span>
+          <span class="link-sub">${link.sub}</span>
+        </div>
+        <span class="link-arrow">→</span>
+      `;
+
+      if (link.copy) {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          navigator.clipboard.writeText(link.copy).then(() => {
+            toast.textContent = `${link.name}: ${link.copy} copied`;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+          });
+        });
+      }
+
+      a.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2.5)';
+        ring.style.width = '56px'; ring.style.height = '56px';
+      });
+      a.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.width = '36px'; ring.style.height = '36px';
+      });
+
+      grid.appendChild(a);
+    });
+
+    // cursor scale for all interactive elements
+    document.querySelectorAll('a, .badge, .music-item, .project-card, .about-cell').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2.5)';
+        ring.style.width = '56px'; ring.style.height = '56px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.width = '36px'; ring.style.height = '36px';
+      });
+    });
   </script>
 </body>
 </html>
