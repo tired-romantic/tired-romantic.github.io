@@ -181,98 +181,109 @@
     }
     @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
 
-    /* ── NOW PLAYING ── */
-    #np-widget {
+    /* ── PRESENCE WIDGET ── */
+    #presence-widget {
       border: 1px solid var(--border);
       background: var(--surface);
       padding: 18px 22px;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s;
+      transition: border-color 0.4s;
     }
-    #np-widget::after {
+    #presence-widget::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 10% 50%, rgba(138,212,200,0.08), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s;
+      background: radial-gradient(circle at 10% 50%, var(--pw-glow, rgba(138,212,200,0.07)), transparent 60%);
       pointer-events: none;
     }
-    #np-widget:hover::after { opacity: 1; }
-    #np-widget::before {
+    #presence-widget::before {
       content: '';
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 2px;
-      background: var(--accent3);
-      transform: scaleY(0);
-      transition: transform 0.3s;
+      background: var(--pw-color, var(--muted));
+      transition: background 0.4s;
     }
-    #np-widget.playing::before { transform: scaleY(1); }
 
-    .np-label {
-      font-size: 9px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
+    .pw-top {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 12px;
     }
-    .np-label::before { content: '//'; color: rgba(180,160,255,0.3); }
-
-    .np-dot {
-      width: 6px; height: 6px;
+    .pw-status-dot {
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: var(--muted);
-      display: inline-block;
       flex-shrink: 0;
+      background: var(--pw-color, var(--muted));
       transition: background 0.4s;
     }
-    .np-dot.live {
-      background: var(--accent3);
-      box-shadow: 0 0 8px rgba(138,212,200,0.5);
-      animation: nppulse 2s ease-in-out infinite;
+    .pw-status-dot.online  { animation: nppulse 2.5s ease-in-out infinite; }
+    @keyframes nppulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.8)} }
+
+    .pw-status-text {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pw-color, var(--muted));
+      transition: color 0.4s;
     }
-    @keyframes nppulse {
-      0%,100%{ opacity:1; transform:scale(1); }
-      50%{ opacity:0.6; transform:scale(0.8); }
+    .pw-device {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.5;
+      margin-left: auto;
     }
 
-    .np-inner {
+    .pw-custom-status {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 14px;
+      padding-left: 18px;
+      border-left: 1px solid var(--border);
+      opacity: 0.85;
+    }
+
+    .pw-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 14px;
+    }
+
+    .pw-spotify {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
-    .np-art {
-      width: 48px; height: 48px;
+    .pw-art {
+      width: 44px; height: 44px;
       border-radius: 2px;
       background: var(--surface2);
       border: 1px solid var(--border);
       flex-shrink: 0;
       overflow: hidden;
     }
-    .np-art img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .np-info { flex: 1; min-width: 0; }
-    .np-song {
+    .pw-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pw-spotify-info { flex: 1; min-width: 0; }
+    .pw-song {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: 16px;
+      font-size: 15px;
       color: var(--white);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.2;
     }
-    .np-artist {
+    .pw-artist {
       font-size: 9px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       color: var(--muted);
       margin-top: 3px;
       white-space: nowrap;
@@ -280,54 +291,44 @@
       text-overflow: ellipsis;
       text-transform: uppercase;
     }
-    .np-album {
-      font-size: 9px;
-      color: rgba(122,117,144,0.5);
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .np-bar {
-      margin-top: 12px;
+    .pw-bar {
+      margin-top: 10px;
       height: 1px;
       background: var(--border);
-      position: relative;
     }
-    .np-bar-fill {
+    .pw-bar-fill {
       height: 100%;
       background: linear-gradient(to right, var(--accent3), var(--accent));
       width: 0%;
       transition: width 1s linear;
     }
-    .np-times {
+    .pw-times {
       display: flex;
       justify-content: space-between;
-      margin-top: 5px;
+      margin-top: 4px;
       font-size: 9px;
-      letter-spacing: 0.1em;
+      color: var(--muted);
+      opacity: 0.45;
+    }
+    .pw-no-spotify {
+      font-size: 11px;
       color: var(--muted);
       opacity: 0.5;
-    }
-    .np-offline {
-      font-size: 12px;
-      color: var(--muted);
-      font-style: italic;
       letter-spacing: 0.05em;
     }
-    .np-link {
+    .pw-link {
       font-size: 9px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent3);
       text-decoration: none;
-      opacity: 0.6;
+      opacity: 0.5;
       transition: opacity 0.2s;
-      margin-top: 8px;
+      margin-top: 10px;
       display: inline-block;
     }
-    .np-link:hover { opacity: 1; }
-    /* ── END NOW PLAYING ── */
+    .pw-link:hover { opacity: 1; }
+    /* ── END PRESENCE WIDGET ── */
 
     .divider {
       width: 100%;
@@ -612,17 +613,18 @@
       </div>
       <p class="scroll-hint">scroll</p>
 
-      <!-- ── NOW PLAYING ── -->
-      <div id="np-widget">
-        <div class="np-label">
-          <span class="np-dot" id="np-dot"></span>
-          now playing
+      <!-- ── PRESENCE WIDGET ── -->
+      <div id="presence-widget">
+        <div class="pw-top">
+          <span class="pw-status-dot" id="pw-dot"></span>
+          <span class="pw-status-text" id="pw-status">connecting...</span>
+          <span class="pw-device" id="pw-device"></span>
         </div>
-        <div id="np-content">
-          <div class="np-offline">fetching signal...</div>
-        </div>
+        <div class="pw-custom-status" id="pw-custom" style="display:none"></div>
+        <div class="pw-divider" id="pw-divider" style="display:none"></div>
+        <div id="pw-spotify"></div>
       </div>
-      <!-- ── END NOW PLAYING ── -->
+      <!-- ── END PRESENCE WIDGET ── -->
 
     </section>
 
@@ -915,80 +917,101 @@
       });
     });
 
-    // ── NOW PLAYING ──
+    // ── PRESENCE WIDGET ──
     const LANYARD = 'https://api.lanyard.rest/v1/users/1061193588022718524';
-    let npTimer = null;
+    let pwTimer = null;
+
+    const STATUS_MAP = {
+      online:  { label: 'online',  color: '#8ad4c8', glow: 'rgba(138,212,200,0.08)', pulse: true  },
+      idle:    { label: 'idle',    color: '#f0c87a', glow: 'rgba(240,200,122,0.08)', pulse: false },
+      dnd:     { label: 'do not disturb', color: '#f08080', glow: 'rgba(240,128,128,0.08)', pulse: false },
+      offline: { label: 'offline', color: '#7a7590', glow: 'rgba(122,117,144,0.05)', pulse: false },
+    };
 
     function fmt(ms) {
       const s = Math.floor(ms / 1000);
       return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
     }
 
-    function renderPlaying(sp) {
-      document.getElementById('np-widget').classList.add('playing');
-      document.getElementById('np-dot').classList.add('live');
-
-      const now     = Date.now();
-      const elapsed = now - sp.timestamps.start;
-      const total   = sp.timestamps.end - sp.timestamps.start;
-      const pct     = Math.min(100, (elapsed / total) * 100);
-      const trackUrl = `https://open.spotify.com/track/${sp.track_id}`;
-
-      document.getElementById('np-content').innerHTML = `
-        <div class="np-inner">
-          <div class="np-art">
-            <img src="${sp.album_art_url}" alt="album art" onerror="this.style.display='none'"/>
-          </div>
-          <div class="np-info">
-            <div class="np-song">${sp.song}</div>
-            <div class="np-artist">${sp.artist}</div>
-            <div class="np-album">${sp.album}</div>
-          </div>
-        </div>
-        <div class="np-bar"><div class="np-bar-fill" id="np-fill" style="width:${pct}%"></div></div>
-        <div class="np-times">
-          <span id="np-elapsed">${fmt(elapsed)}</span>
-          <span>${fmt(total)}</span>
-        </div>
-        <a class="np-link" href="${trackUrl}" target="_blank">→ open in spotify</a>
-      `;
-
-      if (npTimer) clearInterval(npTimer);
-      npTimer = setInterval(() => {
-        const e2  = Date.now() - sp.timestamps.start;
-        const p2  = Math.min(100, (e2 / total) * 100);
-        const fill = document.getElementById('np-fill');
-        const el   = document.getElementById('np-elapsed');
-        if (fill) fill.style.width = p2 + '%';
-        if (el)   el.textContent   = fmt(e2);
-        if (p2 >= 100) clearInterval(npTimer);
-      }, 1000);
+    function getDevice(d) {
+      if (d.active_on_discord_mobile)  return '· mobile';
+      if (d.active_on_discord_desktop) return '· desktop';
+      if (d.active_on_discord_web)     return '· web';
+      return '';
     }
 
-    function renderOffline() {
-      document.getElementById('np-widget').classList.remove('playing');
-      document.getElementById('np-dot').classList.remove('live');
-      document.getElementById('np-content').innerHTML = `
-        <div class="np-offline">not listening to anything right now.</div>
-        <a class="np-link" href="https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96" target="_blank">→ spotify profile</a>
-      `;
+    function renderPresence(data) {
+      const s      = STATUS_MAP[data.discord_status] || STATUS_MAP.offline;
+      const widget = document.getElementById('presence-widget');
+      const dot    = document.getElementById('pw-dot');
+      const status = document.getElementById('pw-status');
+      const device = document.getElementById('pw-device');
+      const custom = document.getElementById('pw-custom');
+      const divider = document.getElementById('pw-divider');
+
+      widget.style.setProperty('--pw-color', s.color);
+      widget.style.setProperty('--pw-glow',  s.glow);
+      dot.style.background = s.color;
+      dot.className = 'pw-status-dot' + (s.pulse ? ' online' : '');
+      status.textContent = s.label;
+      status.style.color = s.color;
+      device.textContent = getDevice(data);
+
+      const customAct = data.activities?.find(a => a.type === 4 && a.state);
+      if (customAct) {
+        custom.textContent = `"${customAct.state}"`;
+        custom.style.display = 'block';
+      } else {
+        custom.style.display = 'none';
+      }
+
+      const sp = data.listening_to_spotify && data.spotify ? data.spotify : null;
+      divider.style.display = (customAct && sp) ? 'block' : 'none';
+
+      const spEl = document.getElementById('pw-spotify');
+      if (sp) {
+        const elapsed = Date.now() - sp.timestamps.start;
+        const total   = sp.timestamps.end - sp.timestamps.start;
+        const pct     = Math.min(100, (elapsed / total) * 100);
+        spEl.innerHTML = `
+          <div class="pw-spotify">
+            <div class="pw-art"><img src="${sp.album_art_url}" alt="art"/></div>
+            <div class="pw-spotify-info">
+              <div class="pw-song">${sp.song}</div>
+              <div class="pw-artist">${sp.artist}</div>
+            </div>
+          </div>
+          <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill" style="width:${pct}%"></div></div>
+          <div class="pw-times"><span id="pw-elapsed">${fmt(elapsed)}</span><span>${fmt(total)}</span></div>
+          <a class="pw-link" href="https://open.spotify.com/track/${sp.track_id}" target="_blank">→ open in spotify</a>
+        `;
+        if (pwTimer) clearInterval(pwTimer);
+        pwTimer = setInterval(() => {
+          const e2  = Date.now() - sp.timestamps.start;
+          const p2  = Math.min(100, (e2 / total) * 100);
+          const f   = document.getElementById('pw-fill');
+          const el  = document.getElementById('pw-elapsed');
+          if (f)  f.style.width    = p2 + '%';
+          if (el) el.textContent   = fmt(e2);
+          if (p2 >= 100) clearInterval(pwTimer);
+        }, 1000);
+      } else {
+        if (pwTimer) clearInterval(pwTimer);
+        spEl.innerHTML = `<div class="pw-no-spotify">not listening to anything right now.</div>`;
+      }
     }
 
-    async function fetchNP() {
+    async function fetchPresence() {
       try {
         const res  = await fetch(LANYARD);
-        const data = await res.json();
-        if (data.data?.listening_to_spotify && data.data?.spotify) {
-          renderPlaying(data.data.spotify);
-        } else {
-          renderOffline();
-        }
-      } catch { renderOffline(); }
+        const json = await res.json();
+        if (json.success) renderPresence(json.data);
+      } catch {}
     }
 
-    fetchNP();
-    setInterval(fetchNP, 30000);
-    // ── END NOW PLAYING ──
+    fetchPresence();
+    setInterval(fetchPresence, 30000);
+    // ── END PRESENCE WIDGET ──
   </script>
 </body>
 </html>
