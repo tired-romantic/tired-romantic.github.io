@@ -34,26 +34,8 @@
       cursor: none;
     }
 
-    .cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.15s ease, opacity 0.2s;
-      mix-blend-mode: screen;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid rgba(180,160,255,0.4);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transition: transform 0.35s ease, width 0.3s, height 0.3s;
-      mix-blend-mode: screen;
-    }
+    .cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s ease, opacity 0.2s; mix-blend-mode: screen; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(180,160,255,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.35s ease, width 0.3s, height 0.3s; mix-blend-mode: screen; }
 
     body::before {
       content: '';
@@ -66,13 +48,7 @@
       opacity: 0.5;
     }
 
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
-      pointer-events: none;
-      z-index: 0;
-    }
+    .blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
     .blob-1 { width: 500px; height: 500px; background: rgba(120,90,240,0.12); top: -150px; left: -150px; animation: drift1 18s ease-in-out infinite; }
     .blob-2 { width: 400px; height: 400px; background: rgba(240,100,160,0.08); bottom: -100px; right: -100px; animation: drift2 22s ease-in-out infinite; }
     .blob-3 { width: 300px; height: 300px; background: rgba(80,200,190,0.07); top: 40%; left: 60%; animation: drift3 16s ease-in-out infinite; }
@@ -81,391 +57,88 @@
     @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
     @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
 
-    .page {
-      position: relative;
-      z-index: 1;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 80px 32px 120px;
-    }
+    .page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 80px 32px 120px; }
 
-    .hero {
-      min-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 20px;
-      opacity: 0;
-      animation: fadeUp 1s 0.2s forwards ease;
-    }
+    .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; gap: 20px; opacity: 0; animation: fadeUp 1s 0.2s forwards ease; }
 
-    .hero-tag {
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
+    .hero-tag { font-size: 11px; letter-spacing: 0.25em; color: var(--muted); text-transform: uppercase; }
 
-    .hero-name {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(56px, 12vw, 96px);
-      line-height: 0.95;
-      color: var(--white);
-      position: relative;
-    }
+    .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(56px, 12vw, 96px); line-height: 0.95; color: var(--white); position: relative; }
+    .hero-name .glow-char { color: var(--accent); text-shadow: 0 0 40px rgba(180,160,255,0.6), 0 0 80px rgba(180,160,255,0.2); }
 
-    .hero-name .glow-char {
-      color: var(--accent);
-      text-shadow: 0 0 40px rgba(180,160,255,0.6), 0 0 80px rgba(180,160,255,0.2);
-    }
+    .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--accent2); letter-spacing: 0.02em; line-height: 1.4; }
+    .hero-desc { font-size: 13px; line-height: 1.9; color: var(--muted); max-width: 420px; border-left: 1px solid var(--border); padding-left: 20px; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
 
-    .hero-subtitle {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 22px;
-      color: var(--accent2);
-      letter-spacing: 0.02em;
-      line-height: 1.4;
-    }
+    .badge { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); background: rgba(255,255,255,0.02); transition: all 0.3s; cursor: none; }
+    .badge:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px rgba(180,160,255,0.15); }
 
-    .hero-desc {
-      font-size: 13px;
-      line-height: 1.9;
-      color: var(--muted);
-      max-width: 420px;
-      border-left: 1px solid var(--border);
-      padding-left: 20px;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .badge {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.02);
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .badge:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 12px rgba(180,160,255,0.15);
-    }
-
-    .scroll-hint {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .scroll-hint::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--muted);
-      animation: scrollLine 2s ease-in-out infinite;
-    }
+    .scroll-hint { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+    .scroll-hint::after { content: ''; display: block; width: 40px; height: 1px; background: var(--muted); animation: scrollLine 2s ease-in-out infinite; }
     @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
 
     /* ── PRESENCE WIDGET ── */
-    #presence-widget {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      padding: 18px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.4s;
-    }
-    #presence-widget::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 10% 50%, var(--pw-glow, rgba(138,212,200,0.07)), transparent 60%);
-      pointer-events: none;
-    }
-    #presence-widget::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: var(--pw-color, var(--muted));
-      transition: background 0.4s;
-    }
-
-    .pw-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .pw-status-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--pw-color, var(--muted));
-      transition: background 0.4s;
-    }
-    .pw-status-dot.online  { animation: nppulse 2.5s ease-in-out infinite; }
+    #presence-widget { border: 1px solid var(--border); background: var(--surface); padding: 18px 22px; position: relative; overflow: hidden; transition: border-color 0.4s; }
+    #presence-widget::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 10% 50%, var(--pw-glow, rgba(138,212,200,0.07)), transparent 60%); pointer-events: none; }
+    #presence-widget::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
+    .pw-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .pw-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
+    .pw-status-dot.online { animation: nppulse 2.5s ease-in-out infinite; }
     @keyframes nppulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.8)} }
-
-    .pw-status-text {
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--pw-color, var(--muted));
-      transition: color 0.4s;
-    }
-    .pw-device {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: 0.5;
-      margin-left: auto;
-    }
-
-    .pw-custom-status {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.4;
-      margin-bottom: 14px;
-      padding-left: 18px;
-      border-left: 1px solid var(--border);
-      opacity: 0.85;
-    }
-
-    .pw-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 14px;
-    }
-
-    .pw-spotify {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .pw-art {
-      width: 44px; height: 44px;
-      border-radius: 2px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      flex-shrink: 0;
-      overflow: hidden;
-    }
+    .pw-status-text { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--pw-color, var(--muted)); transition: color 0.4s; }
+    .pw-device { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0.5; margin-left: auto; }
+    .pw-custom-status { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--text); line-height: 1.4; margin-bottom: 14px; padding-left: 18px; border-left: 1px solid var(--border); opacity: 0.85; }
+    .pw-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
+    .pw-spotify { display: flex; align-items: center; gap: 12px; }
+    .pw-art { width: 44px; height: 44px; border-radius: 2px; background: var(--surface2); border: 1px solid var(--border); flex-shrink: 0; overflow: hidden; }
     .pw-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .pw-spotify-info { flex: 1; min-width: 0; }
-    .pw-song {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 15px;
-      color: var(--white);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.2;
-    }
-    .pw-artist {
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-top: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-transform: uppercase;
-    }
-    .pw-bar {
-      margin-top: 10px;
-      height: 1px;
-      background: var(--border);
-    }
-    .pw-bar-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--accent3), var(--accent));
-      width: 0%;
-      transition: width 1s linear;
-    }
-    .pw-times {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 4px;
-      font-size: 9px;
-      color: var(--muted);
-      opacity: 0.45;
-    }
-    .pw-no-spotify {
-      font-size: 11px;
-      color: var(--muted);
-      opacity: 0.5;
-      letter-spacing: 0.05em;
-    }
-    .pw-link {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent3);
-      text-decoration: none;
-      opacity: 0.5;
-      transition: opacity 0.2s;
-      margin-top: 10px;
-      display: inline-block;
-    }
+    .pw-song { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+    .pw-artist { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+    .pw-bar { margin-top: 10px; height: 1px; background: var(--border); }
+    .pw-bar-fill { height: 100%; background: linear-gradient(to right, var(--accent3), var(--accent)); width: 0%; transition: width 1s linear; }
+    .pw-times { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; color: var(--muted); opacity: 0.45; }
+    .pw-no-spotify { font-size: 11px; color: var(--muted); opacity: 0.5; letter-spacing: 0.05em; }
+    .pw-link { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); text-decoration: none; opacity: 0.5; transition: opacity 0.2s; margin-top: 10px; display: inline-block; }
     .pw-link:hover { opacity: 1; }
     /* ── END PRESENCE WIDGET ── */
 
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--border), transparent);
-      margin: 60px 0;
-    }
+    .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 60px 0; }
 
-    .section {
-      margin-bottom: 80px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    .section { margin-bottom: 80px; opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .section.visible { opacity: 1; transform: translateY(0); }
 
-    .section-label {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .section-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
     .section-label::before { content: '//'; color: var(--muted); }
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .about-cell {
-      background: var(--surface);
-      padding: 24px;
-      transition: background 0.3s;
-      cursor: none;
-    }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .about-cell { background: var(--surface); padding: 24px; transition: background 0.3s; cursor: none; }
     .about-cell:hover { background: var(--surface2); }
     .about-cell-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
     .about-cell-val { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--white); }
-
     .about-para { font-size: 13px; line-height: 2; color: var(--muted); margin-top: 24px; }
     .about-para em { color: var(--accent2); font-style: normal; }
 
     .music-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
-    .music-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 14px 20px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-      cursor: none;
-    }
-    .music-item::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: var(--accent);
-      transform: scaleY(0);
-      transition: transform 0.3s;
-    }
+    .music-item { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border: 1px solid var(--border); background: var(--surface); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
+    .music-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transition: transform 0.3s; }
     .music-item:hover { background: var(--surface2); transform: translateX(4px); }
     .music-item:hover::before { transform: scaleY(1); }
-
     .music-num { font-size: 10px; color: var(--muted); width: 20px; }
     .music-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); flex: 1; }
     .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); }
 
-    .project-card {
-      border: 1px solid var(--border);
-      padding: 28px;
-      background: var(--surface);
-      margin-bottom: 2px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .project-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s;
-      pointer-events: none;
-    }
+    .project-card { border: 1px solid var(--border); padding: 28px; background: var(--surface); margin-bottom: 2px; position: relative; overflow: hidden; transition: all 0.3s; cursor: none; }
+    .project-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
     .project-card:hover { background: var(--surface2); border-color: rgba(180,160,255,0.2); }
     .project-card:hover::after { opacity: 1; }
-
     .project-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 10px; }
     .project-desc { font-size: 12px; line-height: 1.9; color: var(--muted); }
-    .project-tag {
-      display: inline-block;
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent2);
-      border: 1px solid rgba(240,168,200,0.2);
-      padding: 3px 9px;
-      margin-top: 14px;
-      border-radius: 1px;
-    }
+    .project-tag { display: inline-block; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); border: 1px solid rgba(240,168,200,0.2); padding: 3px 9px; margin-top: 14px; border-radius: 1px; }
 
     .links-grid { display: flex; flex-direction: column; gap: 2px; }
-    .link-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 22px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-      cursor: none;
-    }
-    .link-row::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, var(--glow), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .link-row { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; color: var(--text); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
+    .link-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--glow), transparent); opacity: 0; transition: opacity 0.3s; }
     .link-row:hover { border-color: rgba(180,160,255,0.25); transform: translateX(6px); }
     .link-row:hover::before { opacity: 1; }
     .link-left { display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 1; }
@@ -475,58 +148,14 @@
     .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; position: relative; z-index: 1; }
     .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
 
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 10px 22px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      z-index: 9999;
-    }
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--surface2); border: 1px solid var(--border); color: var(--accent); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 22px; pointer-events: none; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 9999; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(5,5,10,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(5,5,10,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      max-width: 420px;
-      width: 90%;
-      padding: 40px;
-      position: relative;
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
-    }
+    .modal { background: var(--surface); border: 1px solid var(--border); max-width: 420px; width: 90%; padding: 40px; position: relative; transform: translateY(20px); transition: transform 0.3s ease; }
     .modal-overlay.open .modal { transform: translateY(0); }
-    .modal::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 20%, var(--glow), transparent 60%);
-      pointer-events: none;
-    }
+    .modal::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, var(--glow), transparent 60%); pointer-events: none; }
     .modal-tag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
     .modal-tag::before { content: '// '; color: var(--muted); }
     .modal-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--white); margin-bottom: 16px; line-height: 1.1; }
@@ -536,23 +165,9 @@
     .modal-close:hover { color: var(--accent); }
     .modal-divider { width: 40px; height: 1px; background: var(--border); margin: 20px 0; }
 
-    .footer {
-      margin-top: 80px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
+    .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
     .hero-name:hover .glitch-text { animation: glitch 0.4s steps(2) forwards; }
     @keyframes glitch {
@@ -602,7 +217,7 @@
       <p class="hero-desc">
         15. dutch. grungepunk with soft edges.<br/>
         i make things: art, music, code, food, trouble.<br/>
-        probably listening to radiohead right now.
+        look at my discord presence below.
       </p>
       <div class="hero-badges">
         <span class="badge" data-modal="badge" data-key="he">he/him</span>
@@ -670,10 +285,10 @@
           <span class="music-name">Måneskin</span>
           <span class="music-tag">obsessed</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="radiohead">
+        <li class="music-item" data-modal="music" data-key="femtanyl">
           <span class="music-num">02</span>
-          <span class="music-name">Radiohead</span>
-          <span class="music-tag">core</span>
+          <span class="music-name">Femtanyl</span>
+          <span class="music-tag">breakcore</span>
         </li>
         <li class="music-item" data-modal="music" data-key="alexg">
           <span class="music-num">03</span>
@@ -695,14 +310,14 @@
           <span class="music-name">Hozier</span>
           <span class="music-tag">feels</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="arctic">
+        <li class="music-item" data-modal="music" data-key="tameimpala">
           <span class="music-num">07</span>
-          <span class="music-name">Arctic Monkeys</span>
-          <span class="music-tag">currently learning</span>
+          <span class="music-name">Tame Impala</span>
+          <span class="music-tag">vibe</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="rks">
+        <li class="music-item" data-modal="music" data-key="overtonight">
           <span class="music-num">08</span>
-          <span class="music-name">Rainbow Kitten Surprise</span>
+          <span class="music-name">overtonight</span>
           <span class="music-tag">soft hours</span>
         </li>
       </ul>
@@ -766,7 +381,6 @@
   </div>
 
   <script>
-    // cursor
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -785,37 +399,35 @@
       requestAnimationFrame(animateRing);
     })();
 
-    // scroll reveal
     const sections = document.querySelectorAll('.section');
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     sections.forEach(s => obs.observe(s));
 
-    // modal data
     const modalData = {
       badge: {
-        he:    { tag: 'pronouns',     title: 'he / him',            body: 'yeah. just he/him. pretty straightforward on this one.' },
-        gay:   { tag: 'identity',     title: 'openly, loudly gay',  body: 'not a phase. very much a feature. 🏳️‍🌈' },
-        adhd:  { tag: 'brain stuff',  title: 'adhd-brained',        body: 'hyperfixation hours are <em>always</em> active. currently: everything at once. send help or snacks.' },
-        calli: { tag: 'craft',        title: 'calligrapher',         body: "ink on paper, names in the dark, letters that feel like they mean something. it's a whole thing." },
-        gmt:   { tag: 'timezone',     title: 'gmt+1',               body: 'the netherlands. yes it rains a lot. yes i like it anyway.' },
+        he:    { tag: 'pronouns',    title: 'he / him',           body: 'yeah. just he/him. pretty straightforward on this one.' },
+        gay:   { tag: 'identity',    title: 'openly, loudly gay', body: 'not a phase. very much a feature. 🏳️‍🌈' },
+        adhd:  { tag: 'brain stuff', title: 'adhd-brained',       body: 'hyperfixation hours are <em>always</em> active. currently: everything at once. send help or snacks.' },
+        calli: { tag: 'craft',       title: 'calligrapher',        body: "ink on paper, names in the dark, letters that feel like they mean something. it's a whole thing." },
+        gmt:   { tag: 'timezone',    title: 'gmt+1',              body: 'the netherlands. yes it rains a lot. yes i like it anyway.' },
       },
       about: {
-        age:       { tag: 'about',     title: 'fifteen',                      body: '15. got a drawing tablet as a birthday gift and immediately lost sleep over it.' },
-        based:     { tag: 'location',  title: 'the netherlands',              body: 'flat land, grey skies, excellent public transport. not for everyone but it is mine.' },
-        languages: { tag: 'languages', title: 'nl · en · fr · de · py',      body: 'dutch natively, english basically fluently, french and german because school. python because i got obsessed with building things.' },
-        aesthetic: { tag: 'vibe',      title: 'grungepunk ∿ liminal',        body: 'dark tones, baggy layers, big thighs, tired eyes. spaces that feel like 3am. music that sounds like a breakdown in a good way.' },
+        age:       { tag: 'about',     title: 'fifteen',                body: '15. got a drawing tablet as a birthday gift and immediately lost sleep over it.' },
+        based:     { tag: 'location',  title: 'the netherlands',        body: 'flat land, grey skies, excellent public transport. not for everyone but it is mine.' },
+        languages: { tag: 'languages', title: 'nl · en · fr · de · py', body: 'dutch natively, english basically fluently, french and german because school. python because i got obsessed with building things.' },
+        aesthetic: { tag: 'vibe',      title: 'grungepunk ∿ liminal',  body: 'dark tones, baggy layers, tired eyes. spaces that feel like 3am. music that sounds like a breakdown in a good way.' },
       },
       music: {
-        maneskin:  { tag: 'currently obsessed', title: 'Måneskin',              body: 'they walked so my entire personality could run. the theatrics. the chaos. the eyeliner. perfection.' },
-        radiohead: { tag: 'core artist',        title: 'Radiohead',             body: 'ok computer is a religious experience. thom yorke wrote songs specifically designed to ruin your day in the best way.' },
-        alexg:     { tag: 'bedroom indie',      title: 'Alex G',                body: 'sounds like a dream you half-remember. lo-fi and deeply strange in a way that feels personal.' },
-        tvgirl:    { tag: 'dream pop',          title: 'TV Girl',               body: 'french exit is an album i put on when i want to feel melancholy but make it fashionable.' },
-        dresden:   { tag: 'dark cabaret',       title: 'The Dresden Dolls',     body: "amanda palmer said 'what's normal anyway' and then made an entire genre out of it. iconic." },
-        hozier:    { tag: 'feels',              title: 'Hozier',                body: "unreal unearth broke something in me. in a good way. mostly. i'm fine." },
-        arctic:    { tag: 'currently learning', title: 'Arctic Monkeys',        body: 'alex turner wrote that song personally for people who feel too much.' },
-        rks:       { tag: 'soft hours',         title: 'Rainbow Kitten Surprise', body: "for when the chaos settles and you just need something warm. it's the 3am album." },
+        maneskin:    { tag: 'currently obsessed', title: 'Måneskin',          body: 'they walked so my entire personality could run. the theatrics. the chaos. the eyeliner. perfection.' },
+        femtanyl:    { tag: 'breakcore',          title: 'Femtanyl',          body: 'chaotic and unapologetic. the kind of music that makes your brain short-circuit in the best way possible.' },
+        alexg:       { tag: 'bedroom indie',      title: 'Alex G',            body: 'sounds like a dream you half-remember. lo-fi and deeply strange in a way that feels personal.' },
+        tvgirl:      { tag: 'dream pop',          title: 'TV Girl',           body: 'french exit is an album i put on when i want to feel melancholy but make it fashionable.' },
+        dresden:     { tag: 'dark cabaret',       title: 'The Dresden Dolls', body: "amanda palmer said 'what's normal anyway' and then made an entire genre out of it. iconic." },
+        hozier:      { tag: 'feels',              title: 'Hozier',            body: "unreal unearth broke something in me. in a good way. mostly. i'm fine." },
+        tameimpala:  { tag: 'vibe',               title: 'Tame Impala',       body: "kevin parker locked himself in a studio and made music that sounds like your brain melting at golden hour. it works." },
+        overtonight: { tag: 'soft hours',         title: 'overtonight',       body: "for when everything gets quiet and you just need something that feels like being held. the 3am playlist staple." },
       },
       project: {
         calli:   { tag: 'status: ongoing',        title: 'Calligraphy & Text Art', body: 'currently lettering names and phrases. ink is the one medium that feels permanent in a good way.' },
@@ -850,10 +462,9 @@
       });
     });
 
-    // links
     const linksData = [
-      { name: 'discord', sub: 'come say hi',              copy: 'tired.romantic', url: null },
-      { name: 'spotify', sub: "what i'm rotting to",      copy: null, url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
+      { name: 'discord',  sub: 'come say hi',              copy: 'tired.romantic', url: null },
+      { name: 'spotify',  sub: "what i'm rotting to",      copy: null, url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
       { name: 'peakness', sub: "my amazing discord server", copy: null, url: 'https://discord.gg/JYpUKE7tRn' },
     ];
 
@@ -881,7 +492,6 @@
         </div>
         <span class="link-arrow">→</span>
       `;
-
       if (link.copy) {
         a.addEventListener('click', e => {
           e.preventDefault();
@@ -893,28 +503,14 @@
           });
         });
       }
-
-      a.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2.5)';
-        ring.style.width = '56px'; ring.style.height = '56px';
-      });
-      a.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        ring.style.width = '36px'; ring.style.height = '36px';
-      });
-
+      a.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; ring.style.width = '56px'; ring.style.height = '56px'; });
+      a.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
       grid.appendChild(a);
     });
 
     document.querySelectorAll('a, .badge, .music-item, .project-card, .about-cell').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2.5)';
-        ring.style.width = '56px'; ring.style.height = '56px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        ring.style.width = '36px'; ring.style.height = '36px';
-      });
+      el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; ring.style.width = '56px'; ring.style.height = '56px'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
     });
 
     // ── PRESENCE WIDGET ──
@@ -922,10 +518,10 @@
     let pwTimer = null;
 
     const STATUS_MAP = {
-      online:  { label: 'online',  color: '#8ad4c8', glow: 'rgba(138,212,200,0.08)', pulse: true  },
-      idle:    { label: 'idle',    color: '#f0c87a', glow: 'rgba(240,200,122,0.08)', pulse: false },
+      online:  { label: 'online',         color: '#8ad4c8', glow: 'rgba(138,212,200,0.08)', pulse: true  },
+      idle:    { label: 'idle',            color: '#f0c87a', glow: 'rgba(240,200,122,0.08)', pulse: false },
       dnd:     { label: 'do not disturb', color: '#f08080', glow: 'rgba(240,128,128,0.08)', pulse: false },
-      offline: { label: 'offline', color: '#7a7590', glow: 'rgba(122,117,144,0.05)', pulse: false },
+      offline: { label: 'offline',         color: '#7a7590', glow: 'rgba(122,117,144,0.05)', pulse: false },
     };
 
     function fmt(ms) {
@@ -941,12 +537,12 @@
     }
 
     function renderPresence(data) {
-      const s      = STATUS_MAP[data.discord_status] || STATUS_MAP.offline;
-      const widget = document.getElementById('presence-widget');
-      const dot    = document.getElementById('pw-dot');
-      const status = document.getElementById('pw-status');
-      const device = document.getElementById('pw-device');
-      const custom = document.getElementById('pw-custom');
+      const s       = STATUS_MAP[data.discord_status] || STATUS_MAP.offline;
+      const widget  = document.getElementById('presence-widget');
+      const dot     = document.getElementById('pw-dot');
+      const status  = document.getElementById('pw-status');
+      const device  = document.getElementById('pw-device');
+      const custom  = document.getElementById('pw-custom');
       const divider = document.getElementById('pw-divider');
 
       widget.style.setProperty('--pw-color', s.color);
@@ -987,12 +583,12 @@
         `;
         if (pwTimer) clearInterval(pwTimer);
         pwTimer = setInterval(() => {
-          const e2  = Date.now() - sp.timestamps.start;
-          const p2  = Math.min(100, (e2 / total) * 100);
-          const f   = document.getElementById('pw-fill');
-          const el  = document.getElementById('pw-elapsed');
-          if (f)  f.style.width    = p2 + '%';
-          if (el) el.textContent   = fmt(e2);
+          const e2 = Date.now() - sp.timestamps.start;
+          const p2 = Math.min(100, (e2 / total) * 100);
+          const f  = document.getElementById('pw-fill');
+          const el = document.getElementById('pw-elapsed');
+          if (f)  f.style.width  = p2 + '%';
+          if (el) el.textContent = fmt(e2);
           if (p2 >= 100) clearInterval(pwTimer);
         }, 1000);
       } else {
