@@ -167,7 +167,6 @@
       letter-spacing: 0.2em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-top: 40px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -181,6 +180,154 @@
       animation: scrollLine 2s ease-in-out infinite;
     }
     @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
+
+    /* ── NOW PLAYING ── */
+    #np-widget {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 18px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    #np-widget::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 50%, rgba(138,212,200,0.08), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    #np-widget:hover::after { opacity: 1; }
+    #np-widget::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent3);
+      transform: scaleY(0);
+      transition: transform 0.3s;
+    }
+    #np-widget.playing::before { transform: scaleY(1); }
+
+    .np-label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .np-label::before { content: '//'; color: rgba(180,160,255,0.3); }
+
+    .np-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      display: inline-block;
+      flex-shrink: 0;
+      transition: background 0.4s;
+    }
+    .np-dot.live {
+      background: var(--accent3);
+      box-shadow: 0 0 8px rgba(138,212,200,0.5);
+      animation: nppulse 2s ease-in-out infinite;
+    }
+    @keyframes nppulse {
+      0%,100%{ opacity:1; transform:scale(1); }
+      50%{ opacity:0.6; transform:scale(0.8); }
+    }
+
+    .np-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .np-art {
+      width: 48px; height: 48px;
+      border-radius: 2px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .np-art img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .np-info { flex: 1; min-width: 0; }
+    .np-song {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .np-artist {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+    }
+    .np-album {
+      font-size: 9px;
+      color: rgba(122,117,144,0.5);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .np-bar {
+      margin-top: 12px;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+    }
+    .np-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent3), var(--accent));
+      width: 0%;
+      transition: width 1s linear;
+    }
+    .np-times {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+    .np-offline {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+    .np-link {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent3);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      margin-top: 8px;
+      display: inline-block;
+    }
+    .np-link:hover { opacity: 1; }
+    /* ── END NOW PLAYING ── */
 
     .divider {
       width: 100%;
@@ -327,7 +474,6 @@
     .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; position: relative; z-index: 1; }
     .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
 
-    /* TOAST */
     .toast {
       position: fixed;
       bottom: 32px;
@@ -347,7 +493,6 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* MODAL */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -374,7 +519,6 @@
       transition: transform 0.3s ease;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
-
     .modal::before {
       content: '';
       position: absolute;
@@ -382,42 +526,13 @@
       background: radial-gradient(circle at 20% 20%, var(--glow), transparent 60%);
       pointer-events: none;
     }
-
-    .modal-tag {
-      font-size: 9px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
+    .modal-tag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
     .modal-tag::before { content: '// '; color: var(--muted); }
-
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: var(--white);
-      margin-bottom: 16px;
-      line-height: 1.1;
-    }
-
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--white); margin-bottom: 16px; line-height: 1.1; }
     .modal-body { font-size: 12px; line-height: 2; color: var(--muted); }
     .modal-body em { color: var(--accent2); font-style: normal; }
-
-    .modal-close {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: none;
-      transition: color 0.2s;
-    }
+    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: none; transition: color 0.2s; }
     .modal-close:hover { color: var(--accent); }
-
     .modal-divider { width: 40px; height: 1px; background: var(--border); margin: 20px 0; }
 
     .footer {
@@ -496,6 +611,19 @@
         <span class="badge" data-modal="badge" data-key="gmt">gmt+1</span>
       </div>
       <p class="scroll-hint">scroll</p>
+
+      <!-- ── NOW PLAYING ── -->
+      <div id="np-widget">
+        <div class="np-label">
+          <span class="np-dot" id="np-dot"></span>
+          now playing
+        </div>
+        <div id="np-content">
+          <div class="np-offline">fetching signal...</div>
+        </div>
+      </div>
+      <!-- ── END NOW PLAYING ── -->
+
     </section>
 
     <div class="divider"></div>
@@ -695,8 +823,7 @@
       },
     };
 
-    // modal logic
-    const overlay  = document.getElementById('modalOverlay');
+    const overlay    = document.getElementById('modalOverlay');
     const modalTag   = document.getElementById('modalTag');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody  = document.getElementById('modalBody');
@@ -723,8 +850,8 @@
 
     // links
     const linksData = [
-      { name: 'discord', sub: 'come say hi',         copy: 'tired.romantic', url: null },
-      { name: 'spotify', sub: "what i'm rotting to", copy: null,             url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
+      { name: 'discord', sub: 'come say hi',              copy: 'tired.romantic', url: null },
+      { name: 'spotify', sub: "what i'm rotting to",      copy: null, url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
       { name: 'peakness', sub: "my amazing discord server", copy: null, url: 'https://discord.gg/JYpUKE7tRn' },
     ];
 
@@ -777,7 +904,6 @@
       grid.appendChild(a);
     });
 
-    // cursor scale for all interactive elements
     document.querySelectorAll('a, .badge, .music-item, .project-card, .about-cell').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.transform = 'scale(2.5)';
@@ -788,6 +914,81 @@
         ring.style.width = '36px'; ring.style.height = '36px';
       });
     });
+
+    // ── NOW PLAYING ──
+    const LANYARD = 'https://api.lanyard.rest/v1/users/1061193588022718524';
+    let npTimer = null;
+
+    function fmt(ms) {
+      const s = Math.floor(ms / 1000);
+      return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    }
+
+    function renderPlaying(sp) {
+      document.getElementById('np-widget').classList.add('playing');
+      document.getElementById('np-dot').classList.add('live');
+
+      const now     = Date.now();
+      const elapsed = now - sp.timestamps.start;
+      const total   = sp.timestamps.end - sp.timestamps.start;
+      const pct     = Math.min(100, (elapsed / total) * 100);
+      const trackUrl = `https://open.spotify.com/track/${sp.track_id}`;
+
+      document.getElementById('np-content').innerHTML = `
+        <div class="np-inner">
+          <div class="np-art">
+            <img src="${sp.album_art_url}" alt="album art" onerror="this.style.display='none'"/>
+          </div>
+          <div class="np-info">
+            <div class="np-song">${sp.song}</div>
+            <div class="np-artist">${sp.artist}</div>
+            <div class="np-album">${sp.album}</div>
+          </div>
+        </div>
+        <div class="np-bar"><div class="np-bar-fill" id="np-fill" style="width:${pct}%"></div></div>
+        <div class="np-times">
+          <span id="np-elapsed">${fmt(elapsed)}</span>
+          <span>${fmt(total)}</span>
+        </div>
+        <a class="np-link" href="${trackUrl}" target="_blank">→ open in spotify</a>
+      `;
+
+      if (npTimer) clearInterval(npTimer);
+      npTimer = setInterval(() => {
+        const e2  = Date.now() - sp.timestamps.start;
+        const p2  = Math.min(100, (e2 / total) * 100);
+        const fill = document.getElementById('np-fill');
+        const el   = document.getElementById('np-elapsed');
+        if (fill) fill.style.width = p2 + '%';
+        if (el)   el.textContent   = fmt(e2);
+        if (p2 >= 100) clearInterval(npTimer);
+      }, 1000);
+    }
+
+    function renderOffline() {
+      document.getElementById('np-widget').classList.remove('playing');
+      document.getElementById('np-dot').classList.remove('live');
+      document.getElementById('np-content').innerHTML = `
+        <div class="np-offline">not listening to anything right now.</div>
+        <a class="np-link" href="https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96" target="_blank">→ spotify profile</a>
+      `;
+    }
+
+    async function fetchNP() {
+      try {
+        const res  = await fetch(LANYARD);
+        const data = await res.json();
+        if (data.data?.listening_to_spotify && data.data?.spotify) {
+          renderPlaying(data.data.spotify);
+        } else {
+          renderOffline();
+        }
+      } catch { renderOffline(); }
+    }
+
+    fetchNP();
+    setInterval(fetchNP, 30000);
+    // ── END NOW PLAYING ──
   </script>
 </body>
 </html>
