@@ -119,6 +119,33 @@
     .about-para { font-size: 13px; line-height: 2; color: var(--muted); margin-top: 24px; }
     .about-para em { color: var(--accent2); font-style: normal; }
 
+    em.tip {
+      color: var(--accent2);
+      font-style: normal;
+      cursor: none;
+      border-bottom: 1px dashed rgba(240,168,200,0.4);
+      transition: border-color 0.2s;
+    }
+    em.tip:hover { border-color: var(--accent2); }
+    .tip-popup {
+      position: fixed;
+      z-index: 8000;
+      display: none;
+      background: var(--surface2);
+      border: 1px solid rgba(240,168,200,0.2);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 300;
+      line-height: 1.7;
+      padding: 10px 16px;
+      max-width: 240px;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .tip-popup::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent2); }
+
     .music-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
     .music-item { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border: 1px solid var(--border); background: var(--surface); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
     .music-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transition: transform 0.3s; }
@@ -169,14 +196,7 @@
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
-    .hero-name:hover .glitch-text { animation: glitch 0.4s steps(2) forwards; }
-    @keyframes glitch {
-      0%   { text-shadow: 2px 0 var(--accent2), -2px 0 var(--accent3); }
-      25%  { text-shadow: -3px 0 var(--accent2), 3px 0 var(--accent3); clip-path: inset(20% 0 60% 0); }
-      50%  { text-shadow: 3px 0 var(--accent), -3px 0 var(--accent2); }
-      75%  { text-shadow: -2px 0 var(--accent3), 2px 0 var(--accent); clip-path: inset(60% 0 10% 0); }
-      100% { text-shadow: none; clip-path: none; }
-    }
+
 
     @media (max-width: 480px) {
       .page { padding: 60px 20px 80px; }
@@ -190,6 +210,7 @@
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
   <div class="toast" id="toast"></div>
+  <div class="tip-popup" id="tipPopup"></div>
 
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modal">
@@ -210,7 +231,7 @@
     <section class="hero">
       <p class="hero-tag">↳ personal space</p>
       <h1 class="hero-name">
-        <span class="glitch-text">sh<span class="glow-char">ī</span>ru</span>
+        sh<span class="glow-char">ī</span>ru
       </h1>
       <p class="hero-subtitle">seal / artist / person-shaped chaos</p>
       <p class="hero-tag" style="margin-top:-8px; letter-spacing:0.2em;">@ tired.romantic</p>
@@ -266,11 +287,11 @@
         </div>
       </div>
       <p class="about-para">
-        i'm a walking contradiction: <em>chaotic but calculated</em>, loud online and soft in real life.
-        i hyperfixate hard on projects: calligraphy, digital art, code, cooking, music.
+        i'm a walking contradiction: <em class="tip" data-tip="calculated in the sense that i have seventeen tabs open and a plan that only makes sense to me.">chaotic but calculated</em>, loud online and soft in real life.
+        i hyperfixate hard on projects: digital art, code, cooking, music.
         i'll build something elaborate and beautiful and then vanish.
         that's just how it goes.<br/><br/>
-        currently: taking singing lessons, working on <em>art things</em>,
+        currently: taking <em class="tip" data-tip="actually working on my voice. it's going well i think. my teacher says i have 'interesting instincts' which might be a compliment.">singing lessons</em>, working on <em class="tip" data-tip="commissions, personal pieces, stuff i'll post eventually when i stop being a perfectionist about it.">art things</em>,
         and existing messily in the world.
       </p>
     </section>
@@ -278,336 +299,182 @@
     <div class="divider"></div>
 
     <section class="section" id="music">
-      <p class="section-label">music / interests</p>
+      <p class="section-label">currently rotting to</p>
       <ul class="music-list">
         <li class="music-item" data-modal="music" data-key="maneskin">
           <span class="music-num">01</span>
           <span class="music-name">Måneskin</span>
           <span class="music-tag">obsessed</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="femtanyl">
+        <li class="music-item" data-modal="music" data-key="mcr">
           <span class="music-num">02</span>
-          <span class="music-name">Femtanyl</span>
-          <span class="music-tag">breakcore</span>
+          <span class="music-name">My Chemical Romance</span>
+          <span class="music-tag">emo gospel</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="greenday">
+          <span class="music-num">03</span>
+          <span class="music-name">Green Day</span>
+          <span class="music-tag">punk chaos</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="overtonight">
+          <span class="music-num">04</span>
+          <span class="music-name">overtonight</span>
+          <span class="music-tag">hyperfixation</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="d2s1">
+          <span class="music-num">05</span>
+          <span class="music-name">d2s1</span>
+          <span class="music-tag">underground</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="nirvana">
+          <span class="music-num">06</span>
+          <span class="music-name">Nirvana</span>
+          <span class="music-tag">grunge roots</span>
         </li>
         <li class="music-item" data-modal="music" data-key="alexg">
-          <span class="music-num">03</span>
+          <span class="music-num">07</span>
           <span class="music-name">Alex G</span>
           <span class="music-tag">bedroom indie</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="tvgirl">
-          <span class="music-num">04</span>
-          <span class="music-name">TV Girl</span>
-          <span class="music-tag">dream pop</span>
-        </li>
-        <li class="music-item" data-modal="music" data-key="dresden">
-          <span class="music-num">05</span>
-          <span class="music-name">The Dresden Dolls</span>
-          <span class="music-tag">dark cabaret</span>
-        </li>
-        <li class="music-item" data-modal="music" data-key="hozier">
-          <span class="music-num">06</span>
-          <span class="music-name">Hozier</span>
-          <span class="music-tag">feels</span>
-        </li>
-        <li class="music-item" data-modal="music" data-key="tameimpala">
-          <span class="music-num">07</span>
-          <span class="music-name">Tame Impala</span>
-          <span class="music-tag">vibe</span>
-        </li>
-        <li class="music-item" data-modal="music" data-key="overtonight">
+        <li class="music-item" data-modal="music" data-key="paramore">
           <span class="music-num">08</span>
-          <span class="music-name">overtonight</span>
-          <span class="music-tag">soft hours</span>
+          <span class="music-name">Paramore</span>
+          <span class="music-tag">post-hardcore heart</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="radiohead">
+          <span class="music-num">09</span>
+          <span class="music-name">Radiohead</span>
+          <span class="music-tag">existential dread pop</span>
+        </li>
+        <li class="music-item" data-modal="music" data-key="femtanyl">
+          <span class="music-num">10</span>
+          <span class="music-name">Femtanyl</span>
+          <span class="music-tag">breakcore</span>
         </li>
       </ul>
     </section>
 
     <div class="divider"></div>
 
-    <section class="section" id="projects">
-      <p class="section-label">art / projects</p>
-
-      <div class="project-card" data-modal="project" data-key="calli">
-        <h3 class="project-title">Calligraphy & Text Art</h3>
-        <p class="project-desc">
-          hand lettering with a dark edge. names, phrases, pieces that feel like they were
-          pulled out of a journal at 2am. ink and intention.
-        </p>
-        <span class="project-tag">ongoing</span>
-      </div>
-
-      <div class="project-card" data-modal="project" data-key="digital">
-        <h3 class="project-title">Digital Art</h3>
-        <p class="project-desc">
-          procreate + drawing tablet. building a visual language that matches the inside of my head:
-          moody, layered, a little haunted.
-        </p>
-        <span class="project-tag">art · digital</span>
-      </div>
-
-      <div class="project-card" data-modal="project" data-key="music">
-        <h3 class="project-title">Music</h3>
-        <p class="project-desc">
-          singing lessons, covers, messing around with production.
-          music is less a hobby and more a language i'm still learning to speak.
-          also building a little DAW app called MUZE on the side because why not.
-        </p>
-        <span class="project-tag">ongoing · covers · production</span>
-      </div>
-
-      <div class="project-card" data-modal="project" data-key="cooking">
-        <h3 class="project-title">Cooking</h3>
-        <p class="project-desc">
-          seriously considering culinary school. testing recipes, building skills.
-          turns out feeding people is its own kind of art.
-        </p>
-        <span class="project-tag">maybe a career actually</span>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <section class="section" id="links">
-      <p class="section-label">links</p>
-      <div class="links-grid" id="linksGrid"></div>
-    </section>
-
     <footer class="footer">
-      <span>shiru · 2026</span>
-      <span>made with mess ✌</span>
+      <span>shīru · tired.romantic</span>
+      <span>gmt+1 · the netherlands</span>
     </footer>
 
   </div>
 
   <script>
+    // ── cursor ──
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 5 + 'px'; cursor.style.top = my - 5 + 'px'; });
+    (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px'; requestAnimationFrame(animRing); })();
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx - 5 + 'px';
-      cursor.style.top  = my - 5 + 'px';
-    });
-
-    (function animateRing() {
-      rx += (mx - rx - 18) * 0.12;
-      ry += (my - ry - 18) * 0.12;
-      ring.style.left = rx + 'px';
-      ring.style.top  = ry + 'px';
-      requestAnimationFrame(animateRing);
-    })();
-
+    // ── intersection observer for sections ──
     const sections = document.querySelectorAll('.section');
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     sections.forEach(s => obs.observe(s));
 
-    const modalData = {
+    // tip popups
+    const tipPopup = document.getElementById('tipPopup');
+    let tipTimeout = null;
+    document.querySelectorAll('em.tip').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        clearTimeout(tipTimeout);
+        // position first, then show
+        const rect = el.getBoundingClientRect();
+        let top = rect.bottom + 10;
+        let left = rect.left;
+        if (left + 250 > window.innerWidth - 16) left = window.innerWidth - 266;
+        if (left < 8) left = 8;
+        tipPopup.style.top = top + 'px';
+        tipPopup.style.left = left + 'px';
+        tipPopup.style.opacity = '0';
+        tipPopup.style.transform = 'translateY(6px)';
+        tipPopup.style.display = 'block';
+        tipPopup.textContent = el.dataset.tip;
+        // force reflow before animating
+        void tipPopup.offsetHeight;
+        tipPopup.style.opacity = '1';
+        tipPopup.style.transform = 'translateY(0)';
+        tipTimeout = setTimeout(() => {
+          tipPopup.style.opacity = '0';
+          tipPopup.style.transform = 'translateY(-6px)';
+        }, 4000);
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.classList.contains('tip')) {
+        clearTimeout(tipTimeout);
+        tipPopup.style.opacity = '0';
+        tipPopup.style.transform = 'translateY(-6px)';
+      }
+    });
+
+    // modal data
+    const modals = {
       badge: {
-        he:    { tag: 'pronouns',    title: 'he / him',           body: 'yeah. just he/him. pretty straightforward on this one.' },
-        gay:   { tag: 'identity',    title: 'openly, loudly gay', body: 'not a phase. very much a feature. 🏳️‍🌈' },
-        adhd:  { tag: 'brain stuff', title: 'adhd-brained',       body: 'hyperfixation hours are <em>always</em> active. currently: everything at once. send help or snacks.' },
-        calli: { tag: 'craft',       title: 'calligrapher',        body: "ink on paper, names in the dark, letters that feel like they mean something. it's a whole thing." },
-        gmt:   { tag: 'timezone',    title: 'gmt+1',              body: 'the netherlands. yes it rains a lot. yes i like it anyway.' },
+        he:    { tag: 'pronouns', title: 'he/him', body: 'just he/him. nothing complicated about it.' },
+        gay:   { tag: 'identity', title: '🏳️‍🌈 gay', body: 'yeah. gay. very gay. proudly and loudly gay.' },
+        adhd:  { tag: 'neurodivergent', title: 'adhd-brained', body: 'hyperfocus for 12 hours straight then forget to eat. classic. i build elaborate things and sometimes vanish off the face of the earth. <em>this is a feature, not a bug.</em>' },
+        calli: { tag: 'craft', title: 'calligrapher', body: 'i write with ink and nibs and make letters into something <em>beautiful</em>. it\'s the one thing that slows my brain down to a reasonable speed.' },
+        gmt:   { tag: 'timezone', title: 'gmt+1', body: 'the netherlands. dutch. yes i speak dutch. no i\'m not going to say gezellig for you.' },
       },
       about: {
-        age:       { tag: 'about',     title: 'fifteen',                body: '15. got a drawing tablet as a birthday gift and immediately lost sleep over it.' },
-        based:     { tag: 'location',  title: 'the netherlands',        body: 'flat land, grey skies, excellent public transport. not for everyone but it is mine.' },
-        languages: { tag: 'languages', title: 'nl · en · fr · de · py', body: 'dutch natively, english basically fluently, french and german because school. python because i got obsessed with building things.' },
-        aesthetic: { tag: 'vibe',      title: 'grungepunk ∿ liminal',  body: 'dark tones, baggy layers, tired eyes. spaces that feel like 3am. music that sounds like a breakdown in a good way.' },
+        age:       { tag: 'about', title: 'fifteen', body: 'yeah, fifteen. building websites and rotting to punk music. perfectly normal.' },
+        based:     { tag: 'location', title: 'the netherlands', body: 'dutch born and raised. gmt+1. my first language is dutch but my brain thinks in whatever\'s convenient.' },
+        languages: { tag: 'languages', title: 'nl · en · fr · de · py', body: 'dutch natively. english constantly. french and german from school. <em>python</em> because i couldn\'t stop myself. yes i count it as a language.' },
+        aesthetic: { tag: 'aesthetic', title: 'grungepunk ∿ liminal', body: 'dark, a little rough around the edges, and weirdly nostalgic for places i\'ve never been. <em>liminal spaces and loud guitars</em>.' },
       },
       music: {
-        maneskin:    { tag: 'currently obsessed', title: 'Måneskin',          body: 'they walked so my entire personality could run. the theatrics. the chaos. the eyeliner. perfection.' },
-        femtanyl:    { tag: 'breakcore',          title: 'Femtanyl',          body: 'chaotic and unapologetic. the kind of music that makes your brain short-circuit in the best way possible.' },
-        alexg:       { tag: 'bedroom indie',      title: 'Alex G',            body: 'sounds like a dream you half-remember. lo-fi and deeply strange in a way that feels personal.' },
-        tvgirl:      { tag: 'dream pop',          title: 'TV Girl',           body: 'french exit is an album i put on when i want to feel melancholy but make it fashionable.' },
-        dresden:     { tag: 'dark cabaret',       title: 'The Dresden Dolls', body: "amanda palmer said 'what's normal anyway' and then made an entire genre out of it. iconic." },
-        hozier:      { tag: 'feels',              title: 'Hozier',            body: "unreal unearth broke something in me. in a good way. mostly. i'm fine." },
-        tameimpala:  { tag: 'vibe',               title: 'Tame Impala',       body: "kevin parker locked himself in a studio and made music that sounds like your brain melting at golden hour. it works." },
-        overtonight: { tag: 'soft hours',         title: 'overtonight',       body: "for when everything gets quiet and you just need something that feels like being held. the 3am playlist staple." },
-      },
-      project: {
-        calli:   { tag: 'status: ongoing',        title: 'Calligraphy & Text Art', body: 'currently lettering names and phrases. ink is the one medium that feels permanent in a good way.' },
-        digital: { tag: 'status: building',       title: 'Digital Art',            body: 'procreate on a drawing tablet. still finding the visual language. moody, layered, a little haunted. getting there.' },
-        music:   { tag: 'status: ongoing',        title: 'Music',                  body: "singing lessons weekly. also building <em>MUZE</em>, a DAW app in electron + react. it crashes sometimes. we don't talk about it." },
-        cooking: { tag: 'status: maybe a career', title: 'Cooking',                body: 'genuinely considering culinary school over media college. turns out feeding people hits different.' },
+        maneskin:   { tag: 'artist', title: 'Måneskin', body: 'italian rock band that crawled out of a eurovision fever dream and became genuinely one of the best rock acts around. damiano\'s voice does something <em>illegal</em>. i have a problem.' },
+        mcr:        { tag: 'artist', title: 'My Chemical Romance', body: 'they saved my life before i even knew i needed saving. the black parade is not an album it is a <em>religious experience</em>. gerard way is a genius and i will die on this hill.' },
+        greenday:   { tag: 'artist', title: 'Green Day', body: 'punk that actually has something to say. billie joe has been angry for 30+ years and honestly? <em>same</em>. american idiot was the first album that made me feel like chaos was okay.' },
+        overtonight:{ tag: 'artist', title: 'overtonight', body: 'you probably don\'t know them. that\'s fine. i\'m not going to explain it either, just go listen. current hyperfixation. <em>completely taken over my brain.</em>' },
+        d2s1:       { tag: 'artist', title: 'd2s1', body: 'deeply underground. don\'t even try googling it, just trust me. this is the kind of music that exists in corners of the internet that feel like they weren\'t meant to be found. <em>i found it anyway.</em>' },
+        nirvana:    { tag: 'artist', title: 'Nirvana', body: 'where the grunge comes from. kurt cobain wrote songs that sound like they came from inside your chest. <em>nevermind</em> is perfect and i will not hear otherwise.' },
+        alexg:      { tag: 'artist', title: 'Alex G', body: 'bedroom indie at its most beautiful and strange. his songs feel like <em>half-remembered dreams</em> — familiar and slightly wrong in the best way. DSU lives rent free in my head.' },
+        paramore:   { tag: 'artist', title: 'Paramore', body: 'hayley williams has one of the most dynamic voices in rock music and this is not up for debate. they\'ve reinvented themselves like three times and been <em>incredible each time</em>.' },
+        radiohead:  { tag: 'artist', title: 'Radiohead', body: 'ok computer and kid a are two of the best albums ever made and that\'s just fact. thom yorke makes music that sounds like <em>anxiety given perfect form</em>. i mean that as the highest compliment.' },
+        femtanyl:   { tag: 'artist', title: 'Femtanyl', body: 'breakcore that hits like a truck and somehow still has melody buried in the chaos. <em>loud, fast, and a little unhinged</em>. perfect for hyperfocus sessions or dissociating productively.' },
       },
     };
 
-    const overlay    = document.getElementById('modalOverlay');
-    const modalTag   = document.getElementById('modalTag');
+    // ── modal logic ──
+    const overlay = document.getElementById('modalOverlay');
+    const modalTag = document.getElementById('modalTag');
     const modalTitle = document.getElementById('modalTitle');
-    const modalBody  = document.getElementById('modalBody');
+    const modalBody = document.getElementById('modalBody');
     const modalClose = document.getElementById('modalClose');
 
-    function openModal(tag, title, body) {
-      modalTag.textContent = tag;
-      modalTitle.textContent = title;
-      modalBody.innerHTML = body;
+    function openModal(type, key) {
+      const data = modals[type]?.[key];
+      if (!data) return;
+      modalTag.textContent = data.tag;
+      modalTitle.textContent = data.title;
+      modalBody.innerHTML = data.body;
       overlay.classList.add('open');
     }
     function closeModal() { overlay.classList.remove('open'); }
 
+    document.querySelectorAll('[data-modal]').forEach(el => {
+      el.addEventListener('click', () => openModal(el.dataset.modal, el.dataset.key));
+    });
     modalClose.addEventListener('click', closeModal);
     overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    document.querySelectorAll('[data-modal]').forEach(el => {
-      el.addEventListener('click', () => {
-        const data = modalData[el.dataset.modal]?.[el.dataset.key];
-        if (data) openModal(data.tag, data.title, data.body);
-      });
-    });
-
-    const linksData = [
-      { name: 'discord',  sub: 'come say hi',              copy: 'tired.romantic', url: null },
-      { name: 'spotify',  sub: "what i'm rotting to",      copy: null, url: 'https://open.spotify.com/user/pf2zn2wttivlzypnrmxg6sr96' },
-      { name: 'peakness', sub: "my amazing discord server", copy: null, url: 'https://discord.gg/JYpUKE7tRn' },
-    ];
-
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    const grid = document.getElementById('linksGrid');
+    // ── toast ──
     const toast = document.getElementById('toast');
-    let toastTimer;
-
-    shuffle(linksData).forEach(link => {
-      const a = document.createElement('a');
-      a.className = 'link-row';
-      a.href = link.url || '#';
-      if (link.url) a.target = '_blank';
-      a.innerHTML = `
-        <div class="link-left">
-          <span class="link-name">${link.name}</span>
-          <span class="link-sub">${link.sub}</span>
-        </div>
-        <span class="link-arrow">→</span>
-      `;
-      if (link.copy) {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          navigator.clipboard.writeText(link.copy).then(() => {
-            toast.textContent = `${link.name}: ${link.copy} copied`;
-            toast.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
-          });
-        });
-      }
-      a.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; ring.style.width = '56px'; ring.style.height = '56px'; });
-      a.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
-      grid.appendChild(a);
-    });
-
-    document.querySelectorAll('a, .badge, .music-item, .project-card, .about-cell').forEach(el => {
-      el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; ring.style.width = '56px'; ring.style.height = '56px'; });
-      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
-    });
-
-    // ── PRESENCE WIDGET ──
-    const LANYARD = 'https://api.lanyard.rest/v1/users/1061193588022718524';
-    let pwTimer = null;
-
-    const STATUS_MAP = {
-      online:  { label: 'online',         color: '#8ad4c8', glow: 'rgba(138,212,200,0.08)', pulse: true  },
-      idle:    { label: 'idle',            color: '#f0c87a', glow: 'rgba(240,200,122,0.08)', pulse: false },
-      dnd:     { label: 'do not disturb', color: '#f08080', glow: 'rgba(240,128,128,0.08)', pulse: false },
-      offline: { label: 'offline',         color: '#7a7590', glow: 'rgba(122,117,144,0.05)', pulse: false },
-    };
-
-    function fmt(ms) {
-      const s = Math.floor(ms / 1000);
-      return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
     }
-
-    function getDevice(d) {
-      if (d.active_on_discord_mobile)  return '· mobile';
-      if (d.active_on_discord_desktop) return '· desktop';
-      if (d.active_on_discord_web)     return '· web';
-      return '';
-    }
-
-    function renderPresence(data) {
-      const s       = STATUS_MAP[data.discord_status] || STATUS_MAP.offline;
-      const widget  = document.getElementById('presence-widget');
-      const dot     = document.getElementById('pw-dot');
-      const status  = document.getElementById('pw-status');
-      const device  = document.getElementById('pw-device');
-      const custom  = document.getElementById('pw-custom');
-      const divider = document.getElementById('pw-divider');
-
-      widget.style.setProperty('--pw-color', s.color);
-      widget.style.setProperty('--pw-glow',  s.glow);
-      dot.style.background = s.color;
-      dot.className = 'pw-status-dot' + (s.pulse ? ' online' : '');
-      status.textContent = s.label;
-      status.style.color = s.color;
-      device.textContent = getDevice(data);
-
-      const customAct = data.activities?.find(a => a.type === 4 && a.state);
-      if (customAct) {
-        custom.textContent = `"${customAct.state}"`;
-        custom.style.display = 'block';
-      } else {
-        custom.style.display = 'none';
-      }
-
-      const sp = data.listening_to_spotify && data.spotify ? data.spotify : null;
-      divider.style.display = (customAct && sp) ? 'block' : 'none';
-
-      const spEl = document.getElementById('pw-spotify');
-      if (sp) {
-        const elapsed = Date.now() - sp.timestamps.start;
-        const total   = sp.timestamps.end - sp.timestamps.start;
-        const pct     = Math.min(100, (elapsed / total) * 100);
-        spEl.innerHTML = `
-          <div class="pw-spotify">
-            <div class="pw-art"><img src="${sp.album_art_url}" alt="art"/></div>
-            <div class="pw-spotify-info">
-              <div class="pw-song">${sp.song}</div>
-              <div class="pw-artist">${sp.artist}</div>
-            </div>
-          </div>
-          <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill" style="width:${pct}%"></div></div>
-          <div class="pw-times"><span id="pw-elapsed">${fmt(elapsed)}</span><span>${fmt(total)}</span></div>
-          <a class="pw-link" href="https://open.spotify.com/track/${sp.track_id}" target="_blank">→ open in spotify</a>
-        `;
-        if (pwTimer) clearInterval(pwTimer);
-        pwTimer = setInterval(() => {
-          const e2 = Date.now() - sp.timestamps.start;
-          const p2 = Math.min(100, (e2 / total) * 100);
-          const f  = document.getElementById('pw-fill');
-          const el = document.getElementById('pw-elapsed');
-          if (f)  f.style.width  = p2 + '%';
-          if (el) el.textContent = fmt(e2);
-          if (p2 >= 100) clearInterval(pwTimer);
-        }, 1000);
-      } else {
-        if (pwTimer) clearInterval(pwTimer);
-        spEl.innerHTML = `<div class="pw-no-spotify">not listening to anything right now.</div>`;
-      }
-    }
-
-    async function fetchPresence() {
-      try {
-        const res  = await fetch(LANYARD);
-        const json = await res.json();
-        if (json.success) renderPresence(json.data);
-      } catch {}
-    }
-
-    fetchPresence();
-    setInterval(fetchPresence, 30000);
-    // ── END PRESENCE WIDGET ──
   </script>
 </body>
 </html>
