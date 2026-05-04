@@ -148,12 +148,12 @@
 
     .music-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
     .music-item { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border: 1px solid var(--border); background: var(--surface); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
-    .music-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transition: transform 0.3s; }
+    .music-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--genre-color, var(--accent)); transform: scaleY(0); transition: transform 0.3s; }
     .music-item:hover { background: var(--surface2); transform: translateX(4px); }
     .music-item:hover::before { transform: scaleY(1); }
     .music-num { font-size: 10px; color: var(--muted); width: 20px; }
     .music-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); flex: 1; }
-    .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent3); }
+    .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--genre-color, var(--accent3)); opacity: 0.8; }
 
     .project-card { border: 1px solid var(--border); padding: 28px; background: var(--surface); margin-bottom: 2px; position: relative; overflow: hidden; transition: all 0.3s; cursor: none; }
     .project-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
@@ -301,52 +301,52 @@
     <section class="section" id="music">
       <p class="section-label">currently rotting to</p>
       <ul class="music-list">
-        <li class="music-item" data-modal="music" data-key="maneskin">
+        <li class="music-item" style="--genre-color:#b8a4f8" data-modal="music" data-key="maneskin">
           <span class="music-num">01</span>
           <span class="music-name">Måneskin</span>
           <span class="music-tag">obsessed</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="mcr">
+        <li class="music-item" style="--genre-color:#f0a8c8" data-modal="music" data-key="mcr">
           <span class="music-num">02</span>
           <span class="music-name">My Chemical Romance</span>
           <span class="music-tag">emo gospel</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="greenday">
+        <li class="music-item" style="--genre-color:#a8d870" data-modal="music" data-key="greenday">
           <span class="music-num">03</span>
           <span class="music-name">Green Day</span>
           <span class="music-tag">punk chaos</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="overtonight">
+        <li class="music-item" style="--genre-color:#8ad4c8" data-modal="music" data-key="overtonight">
           <span class="music-num">04</span>
           <span class="music-name">overtonight</span>
           <span class="music-tag">hyperfixation</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="d2s1">
+        <li class="music-item" style="--genre-color:#9090a8" data-modal="music" data-key="d2s1">
           <span class="music-num">05</span>
           <span class="music-name">d2s1</span>
           <span class="music-tag">underground</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="nirvana">
+        <li class="music-item" style="--genre-color:#c8a060" data-modal="music" data-key="nirvana">
           <span class="music-num">06</span>
           <span class="music-name">Nirvana</span>
           <span class="music-tag">grunge roots</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="alexg">
+        <li class="music-item" style="--genre-color:#e8d490" data-modal="music" data-key="alexg">
           <span class="music-num">07</span>
           <span class="music-name">Alex G</span>
           <span class="music-tag">bedroom indie</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="paramore">
+        <li class="music-item" style="--genre-color:#f0a870" data-modal="music" data-key="paramore">
           <span class="music-num">08</span>
           <span class="music-name">Paramore</span>
           <span class="music-tag">post-hardcore heart</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="radiohead">
+        <li class="music-item" style="--genre-color:#90b8d8" data-modal="music" data-key="radiohead">
           <span class="music-num">09</span>
           <span class="music-name">Radiohead</span>
           <span class="music-tag">existential dread pop</span>
         </li>
-        <li class="music-item" data-modal="music" data-key="femtanyl">
+        <li class="music-item" style="--genre-color:#f060a8" data-modal="music" data-key="femtanyl">
           <span class="music-num">10</span>
           <span class="music-name">Femtanyl</span>
           <span class="music-tag">breakcore</span>
