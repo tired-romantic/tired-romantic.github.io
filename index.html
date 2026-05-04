@@ -79,7 +79,6 @@
 
     /* ── PRESENCE WIDGET ── */
     #presence-widget { border: 1px solid var(--border); background: var(--surface); padding: 18px 22px; position: relative; overflow: hidden; transition: border-color 0.4s; }
-    #presence-widget::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 10% 50%, var(--pw-glow, rgba(138,212,200,0.07)), transparent 60%); pointer-events: none; }
     #presence-widget::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
     .pw-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .pw-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
@@ -500,7 +499,7 @@
       const color = statusColors[status] || statusColors.offline;
 
       widget.style.setProperty('--pw-color', color);
-      widget.style.setProperty('--pw-glow', color.replace(')', ',0.08)').replace('rgb', 'rgba'));
+      widget.style.setProperty('--pw-glow', 'rgba(0,0,0,0)');
       dot.style.background = color;
       dot.className = 'pw-status-dot' + (status !== 'offline' ? ' online' : '');
       statusEl.textContent = statusLabels[status] || status;
