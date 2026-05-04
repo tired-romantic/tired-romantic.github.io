@@ -475,6 +475,114 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2000);
     }
+    // lanyard presence
+    const DISCORD_ID = '1061193588022718524';
+    const statusColors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
+    const statusLabels = { online: 'online', idle: 'idle', dnd: 'do not disturb', offline: 'offline' };
+
+    function fmt(ms) {
+      const s = Math.floor(ms / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60);
+      return h > 0 ? `${h}:${String(m % 60).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}` : `${m}:${String(s % 60).padStart(2,'0')}`;
+    }
+
+    let barInterval = null;
+
+    function renderPresence(data) {
+      const dot = document.getElementById('pw-dot');
+      const statusEl = document.getElementById('pw-status');
+      const deviceEl = document.getElementById('pw-device');
+      const customEl = document.getElementById('pw-custom');
+      const dividerEl = document.getElementById('pw-divider');
+      const spotifyEl = document.getElementById('pw-spotify');
+      const widget = document.getElementById('presence-widget');
+
+      const status = data.discord_status || 'offline';
+      const color = statusColors[status] || statusColors.offline;
+
+      widget.style.setProperty('--pw-color', color);
+      widget.style.setProperty('--pw-glow', color.replace(')', ',0.08)').replace('rgb', 'rgba'));
+      dot.style.background = color;
+      dot.className = 'pw-status-dot' + (status !== 'offline' ? ' online' : '');
+      statusEl.textContent = statusLabels[status] || status;
+      statusEl.style.color = color;
+
+      // active device
+      const devices = [];
+      if (data.active_on_discord_desktop) devices.push('desktop');
+      if (data.active_on_discord_mobile) devices.push('mobile');
+      if (data.active_on_discord_web) devices.push('web');
+      deviceEl.textContent = devices.join(' · ');
+
+      // custom status
+      const customActivity = (data.activities || []).find(a => a.type === 4);
+      if (customActivity && (customActivity.state || customActivity.emoji?.name)) {
+        const emoji = customActivity.emoji?.name || '';
+        const state = customActivity.state || '';
+        customEl.textContent = [emoji, state].filter(Boolean).join(' ');
+        customEl.style.display = 'block';
+        dividerEl.style.display = 'block';
+      } else {
+        customEl.style.display = 'none';
+        dividerEl.style.display = 'none';
+      }
+
+      // spotify
+      clearInterval(barInterval);
+      if (data.spotify && data.listening_to_spotify) {
+        const sp = data.spotify;
+        const artUrl = sp.album_art_url || '';
+        const duration = sp.timestamps?.end - sp.timestamps?.start || 0;
+
+        spotifyEl.innerHTML = `
+          <div class="pw-spotify">
+            <div class="pw-art">${artUrl ? `<img src="${artUrl}" alt="album art"/>` : ''}</div>
+            <div class="pw-spotify-info">
+              <div class="pw-song">${sp.song || 'unknown'}</div>
+              <div class="pw-artist">${sp.artist || ''}</div>
+              <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill"></div></div>
+              <div class="pw-times"><span id="pw-elapsed">0:00</span><span>${fmt(duration)}</span></div>
+            </div>
+          </div>`;
+
+        function updateBar() {
+          const fill = document.getElementById('pw-fill');
+          const elapsed = document.getElementById('pw-elapsed');
+          if (!fill || !elapsed) return;
+          const now = Date.now();
+          const progress = now - sp.timestamps.start;
+          const pct = Math.min(100, (progress / duration) * 100);
+          fill.style.width = pct + '%';
+          elapsed.textContent = fmt(progress);
+        }
+        updateBar();
+        barInterval = setInterval(updateBar, 1000);
+      } else {
+        spotifyEl.innerHTML = '<p class="pw-no-spotify">not listening to anything</p>';
+      }
+    }
+
+    function connectLanyard() {
+      const ws = new WebSocket('wss://api.lanyard.rest/socket');
+      let heartbeat = null;
+
+      ws.addEventListener('open', () => {});
+      ws.addEventListener('message', e => {
+        const msg = JSON.parse(e.data);
+        if (msg.op === 1) {
+          heartbeat = setInterval(() => ws.send(JSON.stringify({ op: 3 })), msg.d.heartbeat_interval);
+          ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+        }
+        if (msg.op === 0) renderPresence(msg.d);
+      });
+      ws.addEventListener('close', () => {
+        clearInterval(heartbeat);
+        setTimeout(connectLanyard, 3000);
+      });
+      ws.addEventListener('error', () => ws.close());
+    }
+
+    connectLanyard();
+
   </script>
 </body>
 </html>
