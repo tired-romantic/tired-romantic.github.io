@@ -154,6 +154,10 @@
     .music-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); flex: 1; }
     .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--genre-color, var(--accent3)); opacity: 0.8; }
 
+    /* ── FRIEND TAG BULLETS ── */
+    .friend-tag { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--genre-color, var(--accent3)); opacity: 0.8; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .friend-bullet { opacity: 0.3; }
+
     .project-card { border: 1px solid var(--border); padding: 28px; background: var(--surface); margin-bottom: 2px; position: relative; overflow: hidden; transition: all 0.3s; cursor: none; }
     .project-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
     .project-card:hover { background: var(--surface2); border-color: rgba(180,160,255,0.2); }
@@ -194,8 +198,6 @@
     .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-
-
 
     @media (max-width: 480px) {
       .page { padding: 60px 20px 80px; }
@@ -355,6 +357,46 @@
 
     <div class="divider"></div>
 
+    <!-- ── FRIENDS SECTION ── -->
+    <!-- To add a friend, copy one <li> block and:
+         - change the number in music-num
+         - change the name in music-name
+         - add/remove <span> items inside friend-tag (each separated by a bullet span)
+         - optionally change --genre-color to any hex color you like
+    -->
+    <section class="section" id="friends">
+      <p class="section-label">people i like</p>
+      <ul class="music-list">
+
+        <li class="music-item" style="--genre-color:#b8a4f8">
+          <span class="music-num">01</span>
+          <span class="music-name">leo</span>
+          <span class="music-num">02</span>
+          <span class="music-name">stars</span>
+          <span class="music-num">03</span>
+          <span class="music-name">miles</span>
+        </li>
+
+        <!-- copy from here ↓ -->
+        <!--
+        <li class="music-item" style="--genre-color:#f0a8c8">
+          <span class="music-num">02</span>
+          <span class="music-name">name</span>
+          <span class="friend-tag">
+            <span>thing one</span>
+            <span class="friend-bullet">·</span>
+            <span>thing two</span>
+          </span>
+        </li>
+        -->
+        <!-- copy to here ↑ -->
+
+      </ul>
+    </section>
+    <!-- ── END FRIENDS SECTION ── -->
+
+    <div class="divider"></div>
+
     <footer class="footer">
       <span>shīru · tired.romantic</span>
       <span>gmt+1 · the netherlands</span>
@@ -384,7 +426,6 @@
       el.addEventListener('click', e => {
         e.stopPropagation();
         clearTimeout(tipTimeout);
-        // position first, then show
         const rect = el.getBoundingClientRect();
         let top = rect.bottom + 10;
         let left = rect.left;
@@ -396,7 +437,6 @@
         tipPopup.style.transform = 'translateY(6px)';
         tipPopup.style.display = 'block';
         tipPopup.textContent = el.dataset.tip;
-        // force reflow before animating
         void tipPopup.offsetHeight;
         tipPopup.style.opacity = '1';
         tipPopup.style.transform = 'translateY(0)';
@@ -474,6 +514,7 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2000);
     }
+
     // lanyard presence
     const DISCORD_ID = '1061193588022718524';
     const statusColors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
@@ -499,20 +540,17 @@
       const color = statusColors[status] || statusColors.offline;
 
       widget.style.setProperty('--pw-color', color);
-      widget.style.setProperty('--pw-glow', 'rgba(0,0,0,0)');
       dot.style.background = color;
       dot.className = 'pw-status-dot' + (status !== 'offline' ? ' online' : '');
       statusEl.textContent = statusLabels[status] || status;
       statusEl.style.color = color;
 
-      // active device
       const devices = [];
       if (data.active_on_discord_desktop) devices.push('desktop');
       if (data.active_on_discord_mobile) devices.push('mobile');
       if (data.active_on_discord_web) devices.push('web');
       deviceEl.textContent = devices.join(' · ');
 
-      // custom status
       const customActivity = (data.activities || []).find(a => a.type === 4);
       if (customActivity && (customActivity.state || customActivity.emoji?.name)) {
         const emoji = customActivity.emoji?.name || '';
@@ -525,7 +563,6 @@
         dividerEl.style.display = 'none';
       }
 
-      // spotify
       clearInterval(barInterval);
       if (data.spotify && data.listening_to_spotify) {
         const sp = data.spotify;
