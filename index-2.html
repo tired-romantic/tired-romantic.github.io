@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>juno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --surface: #1c1c1c;
+      --surface2: #242424;
+      --border: rgba(200,196,190,0.10);
+      --glow: rgba(139,20,20,0.18);
+      --glow2: rgba(255,255,255,0.05);
+      --text: #d6d2cb;
+      --muted: #8a8781;
+      --accent: #8c1c1c;
+      --accent2: #b7b2a9;
+      --accent3: #6d6a63;
+      --white: #ece8e0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.15s ease, opacity 0.2s; mix-blend-mode: screen; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,196,190,0.35); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.35s ease, width 0.3s, height 0.3s; mix-blend-mode: screen; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    .blob { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+    .blob-1 { width: 500px; height: 500px; background: rgba(230,225,215,0.035); top: -150px; left: -150px; animation: drift1 18s ease-in-out infinite; }
+    .blob-2 { width: 400px; height: 400px; background: rgba(230,225,215,0.025); bottom: -100px; right: -100px; animation: drift2 22s ease-in-out infinite; }
+    .blob-3 { width: 300px; height: 300px; background: rgba(230,225,215,0.02); top: 40%; left: 60%; animation: drift3 16s ease-in-out infinite; }
+
+    .marble-veins {
+      position: fixed; inset: -10%; z-index: 0; pointer-events: none; opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.008 0.03' numOctaves='2' seed='11' result='n'/%3E%3CfeColorMatrix in='n' type='matrix' values='0 0 0 0 0.82  0 0 0 0 0.80  0 0 0 0 0.76  0 0 0 0.7 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23v)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 900px;
+      animation: driftVeins 60s ease-in-out infinite;
+    }
+
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
+    @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
+    @keyframes driftVeins { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-2%,1.5%) scale(1.03)} }
+
+    .page { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 80px 32px 120px; }
+
+    .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; gap: 20px; opacity: 0; animation: fadeUp 1s 0.2s forwards ease; }
+
+    .hero-tag { font-size: 11px; letter-spacing: 0.25em; color: var(--muted); text-transform: uppercase; }
+
+    .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(56px, 12vw, 96px); line-height: 0.95; color: var(--white); letter-spacing: 0.02em; position: relative; }
+    .hero-name .glow-char { color: var(--white); position: relative; }
+    .hero-name .glow-char::after { content: ''; position: absolute; left: 6%; right: 6%; bottom: 2px; height: 2px; background: var(--accent); opacity: 0.8; transform: skewX(-10deg); }
+
+    .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: var(--accent2); letter-spacing: 0.02em; line-height: 1.4; }
+    .hero-desc { font-size: 13px; line-height: 1.9; color: var(--muted); max-width: 420px; border-left: 1px solid var(--border); padding-left: 20px; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+    .badge { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); background: rgba(255,255,255,0.02); transition: all 0.3s; cursor: none; }
+    .badge:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px rgba(140,28,28,0.2); }
+
+    .scroll-hint { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+    .scroll-hint::after { content: ''; display: block; width: 40px; height: 1px; background: var(--muted); animation: scrollLine 2s ease-in-out infinite; }
+    @keyframes scrollLine { 0%,100%{width:40px;opacity:0.4} 50%{width:70px;opacity:1} }
+
+    /* ── PRESENCE WIDGET ── */
+    #presence-widget { border: 1px solid var(--border); background: var(--surface); padding: 18px 22px; position: relative; overflow: hidden; transition: border-color 0.4s; }
+    #presence-widget::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
+    .pw-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .pw-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--pw-color, var(--muted)); transition: background 0.4s; }
+    .pw-status-dot.online { animation: nppulse 2.5s ease-in-out infinite; }
+    @keyframes nppulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.8)} }
+    .pw-status-text { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--pw-color, var(--muted)); transition: color 0.4s; }
+    .pw-device { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0.5; margin-left: auto; }
+    .pw-custom-status { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--text); line-height: 1.4; margin-bottom: 14px; padding-left: 18px; border-left: 1px solid var(--border); opacity: 0.85; }
+    .pw-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
+    .pw-spotify { display: flex; align-items: center; gap: 12px; }
+    .pw-art { width: 44px; height: 44px; border-radius: 2px; background: var(--surface2); border: 1px solid var(--border); flex-shrink: 0; overflow: hidden; }
+    .pw-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pw-spotify-info { flex: 1; min-width: 0; }
+    .pw-song { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+    .pw-artist { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+    .pw-bar { margin-top: 10px; height: 1px; background: var(--border); }
+    .pw-bar-fill { height: 100%; background: linear-gradient(to right, var(--accent3), var(--accent)); width: 0%; transition: width 1s linear; }
+    .pw-times { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; color: var(--muted); opacity: 0.45; }
+    .pw-no-spotify { font-size: 11px; color: var(--muted); opacity: 0.5; letter-spacing: 0.05em; }
+    .pw-link { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; opacity: 0.6; transition: opacity 0.2s, color 0.2s; margin-top: 10px; display: inline-block; }
+    .pw-link:hover { opacity: 1; color: var(--accent); }
+    /* ── END PRESENCE WIDGET ── */
+
+    .divider { position: relative; width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin: 60px 0; }
+    .divider::after { content: '†'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--bg); color: var(--accent); font-family: 'Playfair Display', serif; font-size: 15px; line-height: 1; padding: 0 14px; opacity: 0.85; }
+
+    .section { margin-bottom: 80px; opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .section.visible { opacity: 1; transform: translateY(0); }
+
+    .section-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent2); margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+    .section-label::before { content: '//'; color: var(--muted); }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .about-cell { background: var(--surface); padding: 24px; transition: background 0.3s; cursor: none; }
+    .about-cell:hover { background: var(--surface2); }
+    .about-cell-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .about-cell-val { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--white); }
+    .about-para { font-size: 13px; line-height: 2; color: var(--muted); margin-top: 24px; }
+    .about-para em { color: var(--accent2); font-style: normal; }
+
+    em.tip {
+      color: var(--accent2);
+      font-style: normal;
+      cursor: none;
+      border-bottom: 1px dashed rgba(183,178,169,0.4);
+      transition: border-color 0.2s;
+    }
+    em.tip:hover { border-color: var(--accent); }
+    .tip-popup {
+      position: fixed;
+      z-index: 8000;
+      display: none;
+      background: var(--surface2);
+      border: 1px solid rgba(183,178,169,0.2);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 300;
+      line-height: 1.7;
+      padding: 10px 16px;
+      max-width: 240px;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .tip-popup::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); }
+
+    .music-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .music-item { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border: 1px solid var(--border); background: var(--surface); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
+    .music-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--genre-color, var(--accent)); transform: scaleY(0); transition: transform 0.3s; }
+    .music-item:hover { background: var(--surface2); transform: translateX(4px); }
+    .music-item:hover::before { transform: scaleY(1); }
+    .music-num { font-size: 10px; color: var(--muted); width: 20px; }
+    .music-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); flex: 1; }
+    .music-tag { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--genre-color, var(--accent3)); opacity: 0.8; }
+
+    /* ── FRIEND TAG BULLETS ── */
+    .friend-tag { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--genre-color, var(--accent3)); opacity: 0.8; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .friend-bullet { opacity: 0.3; }
+
+    .project-card { border: 1px solid var(--border); padding: 28px; background: var(--surface); margin-bottom: 2px; position: relative; overflow: hidden; transition: all 0.3s; cursor: none; }
+    .project-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--glow), transparent 60%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+    .project-card:hover { background: var(--surface2); border-color: rgba(140,28,28,0.3); }
+    .project-card:hover::after { opacity: 1; }
+    .project-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 10px; letter-spacing: 0.01em; }
+    .project-desc { font-size: 12px; line-height: 1.9; color: var(--muted); }
+    .project-tag { display: inline-block; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); border: 1px solid rgba(183,178,169,0.2); padding: 3px 9px; margin-top: 14px; border-radius: 1px; }
+
+    .links-grid { display: flex; flex-direction: column; gap: 2px; }
+    .link-row { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; color: var(--text); transition: all 0.3s; position: relative; overflow: hidden; cursor: none; }
+    .link-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--glow), transparent); opacity: 0; transition: opacity 0.3s; }
+    .link-row:hover { border-color: rgba(140,28,28,0.35); transform: translateX(6px); }
+    .link-row:hover::before { opacity: 1; }
+    .link-left { display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 1; }
+    .link-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; position: relative; display: inline-block; width: fit-content; }
+    .link-name::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+    .link-row:hover .link-name::after { width: 100%; }
+    .link-sub { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); transition: color 0.3s; }
+    .link-row:hover .link-sub { color: var(--accent2); }
+    .link-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity 0.3s, transform 0.3s; position: relative; z-index: 1; }
+    .link-row:hover .link-arrow { opacity: 1; transform: translateX(4px); }
+
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--surface2); border: 1px solid var(--border); color: var(--accent); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 22px; pointer-events: none; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 9999; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(5,5,10,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--surface); border: 1px solid var(--border); max-width: 420px; width: 90%; padding: 40px; position: relative; transform: translateY(20px); transition: transform 0.3s ease; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, var(--glow), transparent 60%); pointer-events: none; }
+    .modal-tag { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent2); margin-bottom: 16px; }
+    .modal-tag::before { content: '// '; color: var(--muted); }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--white); margin-bottom: 16px; line-height: 1.1; }
+    .modal-body { font-size: 12px; line-height: 2; color: var(--muted); }
+    .modal-body em { color: var(--accent2); font-style: normal; }
+    .modal-close { position: absolute; top: 16px; right: 20px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); background: none; border: none; cursor: none; transition: color 0.2s; }
+    .modal-close:hover { color: var(--accent); }
+    .modal-divider { width: 40px; height: 1px; background: var(--border); margin: 20px 0; }
+
+    .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 480px) {
+      .page { padding: 60px 20px 80px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="toast" id="toast"></div>
+  <div class="tip-popup" id="tipPopup"></div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">esc</button>
+      <p class="modal-tag" id="modalTag"></p>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-divider"></div>
+      <p class="modal-body" id="modalBody"></p>
+    </div>
+  </div>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="marble-veins"></div>
+
+  <div class="page">
+
+    <section class="hero">
+      <p class="hero-tag">↳ personal space</p>
+      <h1 class="hero-name">
+        ju<span class="glow-char">n</span>o
+      </h1>
+      <p class="hero-subtitle">seal / artist / person-shaped chaos</p>
+      <p class="hero-tag" style="margin-top:-8px; letter-spacing:0.2em;">@ tired.romantic</p>
+      <p class="hero-desc">
+        dutch. latin grunge with soft, foggy edges.<br/>
+        i make things: art, music, code, food, trouble.<br/>
+        look at my discord presence below.
+      </p>
+      <div class="hero-badges">
+        <span class="badge" data-modal="badge" data-key="he">he/him</span>
+        <span class="badge" data-modal="badge" data-key="gay">🏳️‍🌈 gay</span>
+        <span class="badge" data-modal="badge" data-key="gender">demiboy / boyflux</span>
+        <span class="badge" data-modal="badge" data-key="adhd">adhd-brained</span>
+        <span class="badge" data-modal="badge" data-key="calli">calligrapher</span>
+        <span class="badge" data-modal="badge" data-key="gmt">gmt+1</span>
+      </div>
+      <p class="scroll-hint">scroll</p>
+<div class="divider"></div>
+
+<section class="section" id="thoughts">
+  <p class="section-label">thoughts</p>
+
+  <div class="project-card">
+    <h3 class="project-title">please DNI if:</h3>
+    <p class="project-desc">
+      - you think misandry doesn't exist or are a part of men's hate. same goes for misogyny and women's hate.
+      - youre homophobic, transphobic, and everything alike
+      - youre an ageplayer (pedophile)
+      - you refuse to accept my boundaries 
+    </p>
+  </div>
+
+
+
+</section>
+      
+
+      <!-- ── PRESENCE WIDGET ── -->
+      <div id="presence-widget">
+        <div class="pw-top">
+          <span class="pw-status-dot" id="pw-dot"></span>
+          <span class="pw-status-text" id="pw-status">connecting...</span>
+          <span class="pw-device" id="pw-device"></span>
+        </div>
+        <div class="pw-custom-status" id="pw-custom" style="display:none"></div>
+        <div class="pw-divider" id="pw-divider" style="display:none"></div>
+        <div id="pw-spotify"></div>
+      </div>
+      <!-- ── END PRESENCE WIDGET ── -->
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section" id="about">
+      <p class="section-label">about</p>
+      <div class="about-grid">
+        <div class="about-cell" data-modal="about" data-key="based">
+          <p class="about-cell-label">based</p>
+          <p class="about-cell-val">the netherlands</p>
+        </div>
+        <div class="about-cell" data-modal="about" data-key="languages">
+          <p class="about-cell-label">languages</p>
+          <p class="about-cell-val">nl · en · fr · de · py</p>
+        </div>
+        <div class="about-cell" data-modal="about" data-key="aesthetic">
+          <p class="about-cell-label">aesthetic</p>
+          <p class="about-cell-val">latin ∿ grunge ∿ liminal</p>
+        </div>
+      </div>
+      <p class="about-para">
+        i'm a walking contradiction: <em class="tip" data-tip="calculated in the sense that i have seventeen tabs open and a plan that only makes sense to me.">chaotic but calculated</em>, loud online and soft in real life.
+        i hyperfixate hard on projects: digital art, code, cooking, music.
+        i'll build something elaborate and beautiful and then vanish.
+        that's just how it goes.<br/><br/>
+        currently: taking <em class="tip" data-tip="actually working on my voice. it's going well i think. my teacher says i have 'interesting instincts' which might be a compliment.">singing lessons</em>, working on <em class="tip" data-tip="commissions, personal pieces, stuff i'll post eventually when i stop being a perfectionist about it.">art things</em>,
+        and existing messily in the world.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section" id="music">
+      <p class="section-label">currently rotting to</p>
+      <ul class="music-list">
+        <li class="music-item" style="--genre-color:#c8a060" data-modal="music" data-key="nirvana">
+          <span class="music-num">01</span>
+          <span class="music-name">Nirvana</span>
+          <span class="music-tag">grunge roots</span>
+        </li>
+        <li class="music-item" style="--genre-color:#9c7a5a" data-modal="music" data-key="ihatemyselfbecause">
+          <span class="music-num">02</span>
+          <span class="music-name">I Hate Myself Because</span>
+          <span class="music-tag">screamo underground</span>
+        </li>
+        <li class="music-item" style="--genre-color:#d2703c" data-modal="music" data-key="maneskin">
+          <span class="music-num">03</span>
+          <span class="music-name">Måneskin</span>
+          <span class="music-tag">obsessed</span>
+        </li>
+        <li class="music-item" style="--genre-color:#f0a8c8" data-modal="music" data-key="mcr">
+          <span class="music-num">04</span>
+          <span class="music-name">My Chemical Romance</span>
+          <span class="music-tag">emo gospel</span>
+        </li>
+        <li class="music-item" style="--genre-color:#a8d870" data-modal="music" data-key="greenday">
+          <span class="music-num">05</span>
+          <span class="music-name">Green Day</span>
+          <span class="music-tag">punk chaos</span>
+        </li>
+        <li class="music-item" style="--genre-color:#8ad4c8" data-modal="music" data-key="overtonight">
+          <span class="music-num">06</span>
+          <span class="music-name">overtonight</span>
+          <span class="music-tag">hyperfixation</span>
+        </li>
+        <li class="music-item" style="--genre-color:#9090a8" data-modal="music" data-key="d2s1">
+          <span class="music-num">07</span>
+          <span class="music-name">d2s1</span>
+          <span class="music-tag">underground</span>
+        </li>
+        <li class="music-item" style="--genre-color:#e8d490" data-modal="music" data-key="alexg">
+          <span class="music-num">08</span>
+          <span class="music-name">Alex G</span>
+          <span class="music-tag">bedroom indie</span>
+        </li>
+        <li class="music-item" style="--genre-color:#f0a870" data-modal="music" data-key="paramore">
+          <span class="music-num">09</span>
+          <span class="music-name">Paramore</span>
+          <span class="music-tag">post-hardcore heart</span>
+        </li>
+        <li class="music-item" style="--genre-color:#90b8d8" data-modal="music" data-key="radiohead">
+          <span class="music-num">10</span>
+          <span class="music-name">Radiohead</span>
+          <span class="music-tag">existential dread pop</span>
+        </li>
+        <li class="music-item" style="--genre-color:#f060a8" data-modal="music" data-key="femtanyl">
+          <span class="music-num">11</span>
+          <span class="music-name">Femtanyl</span>
+          <span class="music-tag">breakcore</span>
+        </li>
+      </ul>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ── FRIENDS SECTION ── -->
+    <!-- To add a friend, copy one <li> block and:
+         - change the number in music-num
+         - change the name in music-name
+         - add/remove <span> items inside friend-tag (each separated by a bullet span)
+         - optionally change --genre-color to any hex color you like
+    -->
+    <section class="section" id="friends">
+      <p class="section-label">people i like</p>
+      <ul class="music-list">
+
+        <li class="music-item" style="--genre-color:#b8a4f8">
+          <span class="music-num">01</span>
+          <span class="music-name">elliot</span>
+          <span class="music-num">02</span>
+          <span class="music-name">claire</span>
+          <span class="music-num">03</span>
+          <span class="music-name">lilah</span>
+        </li>
+
+        <!-- copy from here ↓ -->
+        <!--
+        <li class="music-item" style="--genre-color:#f0a8c8">
+          <span class="music-num">02</span>
+          <span class="music-name">name</span>
+          <span class="friend-tag">
+            <span>thing one</span>
+            <span class="friend-bullet">·</span>
+            <span>thing two</span>
+          </span>
+        </li>
+        -->
+        <!-- copy to here ↑ -->
+
+      </ul>
+    </section>
+    <!-- ── END FRIENDS SECTION ── -->
+
+    <div class="divider"></div>
+
+    <footer class="footer">
+      <span>juno · tired.romantic</span>
+      <span>gmt+1 · the netherlands</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // ── cursor ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 5 + 'px'; cursor.style.top = my - 5 + 'px'; });
+    (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px'; requestAnimationFrame(animRing); })();
+
+    // ── intersection observer for sections ──
+    const sections = document.querySelectorAll('.section');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    sections.forEach(s => obs.observe(s));
+
+    // tip popups
+    const tipPopup = document.getElementById('tipPopup');
+    let tipTimeout = null;
+    document.querySelectorAll('em.tip').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        clearTimeout(tipTimeout);
+        const rect = el.getBoundingClientRect();
+        let top = rect.bottom + 10;
+        let left = rect.left;
+        if (left + 250 > window.innerWidth - 16) left = window.innerWidth - 266;
+        if (left < 8) left = 8;
+        tipPopup.style.top = top + 'px';
+        tipPopup.style.left = left + 'px';
+        tipPopup.style.opacity = '0';
+        tipPopup.style.transform = 'translateY(6px)';
+        tipPopup.style.display = 'block';
+        tipPopup.textContent = el.dataset.tip;
+        void tipPopup.offsetHeight;
+        tipPopup.style.opacity = '1';
+        tipPopup.style.transform = 'translateY(0)';
+        tipTimeout = setTimeout(() => {
+          tipPopup.style.opacity = '0';
+          tipPopup.style.transform = 'translateY(-6px)';
+        }, 4000);
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.classList.contains('tip')) {
+        clearTimeout(tipTimeout);
+        tipPopup.style.opacity = '0';
+        tipPopup.style.transform = 'translateY(-6px)';
+      }
+    });
+
+    // modal data
+    const modals = {
+      badge: {
+        he:    { tag: 'pronouns', title: 'he/him', body: 'just he/they. nothing complicated about it.' },
+        gay:   { tag: 'identity', title: '🏳️‍🌈 gay', body: 'yeah. gay. very gay. proudly and loudly gay.' },
+        gender: { tag: 'identity', title: 'demiboy / boyflux', body: 'partially a boy, and how much of one shifts depending on the day. <em>fluid, not fixed</em>. some days it\'s louder, some days it\'s quieter. that\'s the whole deal.' },
+        adhd:  { tag: 'neurodivergent', title: 'adhd-brained', body: 'hyperfocus for 12 hours straight then forget to eat. classic. i build elaborate things and sometimes vanish off the face of the earth. <em>this is a feature, not a bug.</em>' },
+        calli: { tag: 'craft', title: 'calligrapher', body: 'i write with ink and nibs and make letters into something <em>beautiful</em>. it\'s the one thing that slows my brain down to a reasonable speed.' },
+        gmt:   { tag: 'timezone', title: 'gmt+1', body: 'the netherlands. dutch. yes i speak dutch. no i\'m not going to say gezellig for you.' },
+      },
+      about: {
+        based:     { tag: 'location', title: 'the netherlands', body: 'dutch born and raised. gmt+1. my first language is dutch but my brain thinks in whatever\'s convenient.' },
+        languages: { tag: 'languages', title: 'nl · en · fr · de · py', body: 'dutch natively. english constantly. french and german from school. <em>python</em> because i couldn\'t stop myself. yes i count it as a language.' },
+        aesthetic: { tag: 'aesthetic', title: 'latin ∿ grunge ∿ liminal', body: 'terracotta and gold bleeding into rust and static. <em>warm and worn down at the same time</em>. it feels like an empty plaza at golden hour that you\'re not sure is real.' },
+      },
+      music: {
+        maneskin:   { tag: 'artist', title: 'Måneskin', body: 'italian rock band that crawled out of a eurovision fever dream and became genuinely one of the best rock acts around. damiano\'s voice does something <em>illegal</em>. i have a problem.' },
+        mcr:        { tag: 'artist', title: 'My Chemical Romance', body: 'they saved my life before i even knew i needed saving. the black parade is not an album it is a <em>religious experience</em>. gerard way is a genius and i will die on this hill.' },
+        greenday:   { tag: 'artist', title: 'Green Day', body: 'punk that actually has something to say. billie joe has been angry for 30+ years and honestly? <em>same</em>. american idiot was the first album that made me feel like chaos was okay.' },
+        overtonight:{ tag: 'artist', title: 'overtonight', body: 'you probably don\'t know them. that\'s fine. i\'m not going to explain it either, just go listen. current hyperfixation. <em>completely taken over my brain.</em>' },
+        d2s1:       { tag: 'artist', title: 'd2s1', body: 'deeply underground. don\'t even try googling it, just trust me. this is the kind of music that exists in corners of the internet that feel like they weren\'t meant to be found. <em>i found it anyway.</em>' },
+        nirvana:    { tag: 'artist', title: 'Nirvana', body: 'where the grunge comes from. kurt cobain wrote songs that sound like they came from inside your chest. <em>nevermind</em> is perfect and i will not hear otherwise.' },
+        ihatemyselfbecause: { tag: 'artist', title: 'I Hate Myself Because', body: 'deep-cut screamo that sounds like it was recorded in a basement and never meant to leave it. raw, unpolished, and <em>entirely too honest</em>. not for everyone. i think that\'s the point.' },
+        alexg:      { tag: 'artist', title: 'Alex G', body: 'bedroom indie at its most beautiful and strange. his songs feel like <em>half-remembered dreams</em> — familiar and slightly wrong in the best way. DSU lives rent free in my head.' },
+        paramore:   { tag: 'artist', title: 'Paramore', body: 'hayley williams has one of the most dynamic voices in rock music and this is not up for debate. they\'ve reinvented themselves like three times and been <em>incredible each time</em>.' },
+        radiohead:  { tag: 'artist', title: 'Radiohead', body: 'ok computer and kid a are two of the best albums ever made and that\'s just fact. thom yorke makes music that sounds like <em>anxiety given perfect form</em>. i mean that as the highest compliment.' },
+        femtanyl:   { tag: 'artist', title: 'Femtanyl', body: 'breakcore that hits like a truck and somehow still has melody buried in the chaos. <em>loud, fast, and a little unhinged</em>. perfect for hyperfocus sessions or dissociating productively.' },
+      },
+    };
+
+    // ── modal logic ──
+    const overlay = document.getElementById('modalOverlay');
+    const modalTag = document.getElementById('modalTag');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModal(type, key) {
+      const data = modals[type]?.[key];
+      if (!data) return;
+      modalTag.textContent = data.tag;
+      modalTitle.textContent = data.title;
+      modalBody.innerHTML = data.body;
+      overlay.classList.add('open');
+    }
+    function closeModal() { overlay.classList.remove('open'); }
+
+    document.querySelectorAll('[data-modal]').forEach(el => {
+      el.addEventListener('click', () => openModal(el.dataset.modal, el.dataset.key));
+    });
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── toast ──
+    const toast = document.getElementById('toast');
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // lanyard presence
+    const DISCORD_ID = '1061193588022718524';
+    const statusColors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
+    const statusLabels = { online: 'online', idle: 'idle', dnd: 'do not disturb', offline: 'offline' };
+
+    function fmt(ms) {
+      const s = Math.floor(ms / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60);
+      return h > 0 ? `${h}:${String(m % 60).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}` : `${m}:${String(s % 60).padStart(2,'0')}`;
+    }
+
+    let barInterval = null;
+
+    function renderPresence(data) {
+      const dot = document.getElementById('pw-dot');
+      const statusEl = document.getElementById('pw-status');
+      const deviceEl = document.getElementById('pw-device');
+      const customEl = document.getElementById('pw-custom');
+      const dividerEl = document.getElementById('pw-divider');
+      const spotifyEl = document.getElementById('pw-spotify');
+      const widget = document.getElementById('presence-widget');
+
+      const status = data.discord_status || 'offline';
+      const color = statusColors[status] || statusColors.offline;
+
+      widget.style.setProperty('--pw-color', color);
+      dot.style.background = color;
+      dot.className = 'pw-status-dot' + (status !== 'offline' ? ' online' : '');
+      statusEl.textContent = statusLabels[status] || status;
+      statusEl.style.color = color;
+
+      const devices = [];
+      if (data.active_on_discord_desktop) devices.push('desktop');
+      if (data.active_on_discord_mobile) devices.push('mobile');
+      if (data.active_on_discord_web) devices.push('web');
+      deviceEl.textContent = devices.join(' · ');
+
+      const customActivity = (data.activities || []).find(a => a.type === 4);
+      if (customActivity && (customActivity.state || customActivity.emoji?.name)) {
+        const emoji = customActivity.emoji?.name || '';
+        const state = customActivity.state || '';
+        customEl.textContent = [emoji, state].filter(Boolean).join(' ');
+        customEl.style.display = 'block';
+        dividerEl.style.display = 'block';
+      } else {
+        customEl.style.display = 'none';
+        dividerEl.style.display = 'none';
+      }
+
+      clearInterval(barInterval);
+      if (data.spotify && data.listening_to_spotify) {
+        const sp = data.spotify;
+        const artUrl = sp.album_art_url || '';
+        const duration = sp.timestamps?.end - sp.timestamps?.start || 0;
+
+        spotifyEl.innerHTML = `
+          <div class="pw-spotify">
+            <div class="pw-art">${artUrl ? `<img src="${artUrl}" alt="album art"/>` : ''}</div>
+            <div class="pw-spotify-info">
+              <div class="pw-song">${sp.song || 'unknown'}</div>
+              <div class="pw-artist">${sp.artist || ''}</div>
+              <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill"></div></div>
+              <div class="pw-times"><span id="pw-elapsed">0:00</span><span>${fmt(duration)}</span></div>
+            </div>
+          </div>`;
+
+        function updateBar() {
+          const fill = document.getElementById('pw-fill');
+          const elapsed = document.getElementById('pw-elapsed');
+          if (!fill || !elapsed) return;
+          const now = Date.now();
+          const progress = now - sp.timestamps.start;
+          const pct = Math.min(100, (progress / duration) * 100);
+          fill.style.width = pct + '%';
+          elapsed.textContent = fmt(progress);
+        }
+        updateBar();
+        barInterval = setInterval(updateBar, 1000);
+      } else {
+        spotifyEl.innerHTML = '<p class="pw-no-spotify">not listening to anything</p>';
+      }
+    }
+
+    function connectLanyard() {
+      const ws = new WebSocket('wss://api.lanyard.rest/socket');
+      let heartbeat = null;
+
+      ws.addEventListener('open', () => {});
+      ws.addEventListener('message', e => {
+        const msg = JSON.parse(e.data);
+        if (msg.op === 1) {
+          heartbeat = setInterval(() => ws.send(JSON.stringify({ op: 3 })), msg.d.heartbeat_interval);
+          ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+        }
+        if (msg.op === 0) renderPresence(msg.d);
+      });
+      ws.addEventListener('close', () => {
+        clearInterval(heartbeat);
+        setTimeout(connectLanyard, 3000);
+      });
+      ws.addEventListener('error', () => ws.close());
+    }
+
+    connectLanyard();
+
+  </script>
+</body>
+</html>
